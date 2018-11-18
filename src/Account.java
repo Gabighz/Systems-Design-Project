@@ -51,4 +51,28 @@ public class Account {
 
     }
 
+    /**
+     * @return The title of the person.
+     */
+    public String getTitle () {
+        return title;
+
+    }
+
+    /**
+     * @return The forename of the person.
+     */
+    public String getForename () {
+        return forename;
+
+    }
+
+    /**
+     * @return The surname of the person.
+     */
+    public String getSurname () {
+        return surname;
+
+    }
+
 }
