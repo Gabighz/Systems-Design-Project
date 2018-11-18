@@ -15,13 +15,18 @@
  * @author Gabriel Ghiuzan
  */
 
-public class Administrator {
+public class Administrator extends Account {
 
     /**
      * Constructs an Administrator
+     * @param emailAddress The email address of the administrator.
+     * @param password The password of the administrator.
+     * @param title The title the administrator has, such as Mister.
+     * @param forename The forename of the administrator.
+     * @param surname The surname of the administrator.
      */
-    public Administrator () {
-
+    public Administrator (String emailAddress, String password, String title, String forename, String surname) {
+        super (emailAddress, password, title, forename, surname);
 
     }
 
