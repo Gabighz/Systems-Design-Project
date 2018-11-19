@@ -52,6 +52,21 @@ public class Account {
     }
 
     /**
+     * The method returns a string suitable for printing.
+     *
+     * @return String to print out the Account.
+     */
+    public String toString () {
+        String result = "";
+        result += "The email address of the account is: " + emailAddress + "\n";
+        result += "Their password is: " + password + "\n";
+        result += "Their title is: " + title + "\n";
+        result += "Their forename is: " + forename + "\n";
+        result += "Their surname is: " + surname + "\n";
+        return result;
+    }
+
+    /**
      * @return The title of the person.
      */
     public String getTitle () {
