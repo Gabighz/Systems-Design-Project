@@ -46,7 +46,7 @@ public class Administrator extends Account {
     /**
      * Adds a new user account.
      * Granting privileges should be inherent to the type of the account created. For example, the front-end should see
-     * that a given account is a Student object. From that account, a user should only be able to see a 'view status' screen.
+     * that a given account belongs to the Student table. From that account, a user should only be able to see a 'view status' screen.
      *
      * @param accountType The type of the account to be created, e.g. administrator or student.
      * @param emailAddress The email address of the new user account.
@@ -54,27 +54,24 @@ public class Administrator extends Account {
      * @param title The title the new user account has, such as Mister or Doctor.
      * @param forename The forename of the new user account.
      * @param surname The surname of the new user account.
-     *
-     * @return A new account of intended type, e.g. an administrator or student account.
      */
     public void addUser(String accountType, String emailAddress, String password, String title, String forename, String surname) {
-        Account newAccount;
 
-        if (accountType.equals("administrator")) {
-            newAccount = new Administrator (emailAddress, password, title, forename, surname);
+        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+        Statement statement = null;
 
-        } else if (accountType.equals("registrar")) {
-            newAccount = new Registrar (emailAddress, password, title, forename, surname);
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
 
-        } else if (accountType.equals("teacher")) {
-            newAccount = new Teacher (emailAddress, password, title, forename, surname);
-
-        } else if (accountType.equals("student")) {
-            newAccount = new Student (emailAddress, password, title, forename, surname);
+            String toInsert = String.format("%s %s %s %s %s", emailAddress, password, title, forename, surname);
+            statement.executeUpdate("INSERT INTO " + accountType + "VALUES " + toInsert);
 
         }
 
-        // execute some JDBC code here
+        catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
 
     }
 
@@ -86,10 +83,12 @@ public class Administrator extends Account {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
             statement.executeUpdate("DELETE FROM *" + "WHERE Email = " + emailAddress);
+
         }
 
         catch (SQLException ex) {
             ex.printStackTrace();
+
         }
 
 
