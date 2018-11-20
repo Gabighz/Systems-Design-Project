@@ -15,6 +15,8 @@
  * @author Gabriel Ghiuzan
  */
 
+import java.sql.*;
+
 public class Administrator extends Account {
 
     /**
@@ -55,28 +57,41 @@ public class Administrator extends Account {
      *
      * @return A new account of intended type, e.g. an administrator or student account.
      */
-    public Account addUser(String accountType, String emailAddress, String password, String title, String forename, String surname) {
+    public void addUser(String accountType, String emailAddress, String password, String title, String forename, String surname) {
         Account newAccount;
 
-        switch (accountType) {
-            case "administrator":
-                newAccount = new Administrator (emailAddress, password, title, forename, surname);
-                break;
-            case "registrar":
-                newAccount = new Registrar (emailAddress, password, title, forename, surname);
-                break;
-            case "teacher":
-                newAccount = new Teacher (emailAddress, password, title, forename, surname);
-                break;
-            case "student":
-                newAccount = new Student (emailAddress, password, title, forename, surname);
-                break;
-            default:
-                newAccount = null; // or could throw an exception
-                break;
+        if (accountType.equals("administrator")) {
+            newAccount = new Administrator (emailAddress, password, title, forename, surname);
+
+        } else if (accountType.equals("registrar")) {
+            newAccount = new Registrar (emailAddress, password, title, forename, surname);
+
+        } else if (accountType.equals("teacher")) {
+            newAccount = new Teacher (emailAddress, password, title, forename, surname);
+
+        } else if (accountType.equals("student")) {
+            newAccount = new Student (emailAddress, password, title, forename, surname);
+
         }
 
-        return newAccount;
+        // execute some JDBC code here
+
+    }
+
+    public void removeUser(String emailAddress) {
+
+        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+            statement.executeUpdate("DELETE FROM *" + "WHERE Email = " + emailAddress);
+        }
+
+        catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
 
     }
 
