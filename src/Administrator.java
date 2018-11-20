@@ -64,7 +64,7 @@ public class Administrator extends Account {
             statement = con.createStatement();
 
             String toInsert = String.format("%s %s %s %s %s", emailAddress, password, title, forename, surname);
-            statement.executeUpdate("INSERT INTO " + accountType + "VALUES " + toInsert);
+            statement.executeUpdate("INSERT INTO " + accountType + " VALUES " + toInsert);
 
         }
 
@@ -82,7 +82,7 @@ public class Administrator extends Account {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM *" + "WHERE Email = " + emailAddress);
+            statement.executeUpdate("DELETE FROM * " + "WHERE Email = " + emailAddress);
 
         }
 
