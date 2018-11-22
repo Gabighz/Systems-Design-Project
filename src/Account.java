@@ -53,6 +53,7 @@ public class Account {
 
     /**
      * The method returns a string suitable for printing.
+     * Only needed during development.
      *
      * @return String to print out the Account.
      */
