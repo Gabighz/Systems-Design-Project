@@ -21,14 +21,15 @@ public class Administrator extends Account {
 
     /**
      * Constructs an Administrator
+     *
      * @param emailAddress The email address of the administrator.
-     * @param password The password of the administrator.
-     * @param title The title the administrator has, such as Mister.
-     * @param forename The forename of the administrator.
-     * @param surname The surname of the administrator.
+     * @param password     The password of the administrator.
+     * @param title        The title the administrator has, such as Mister.
+     * @param forename     The forename of the administrator.
+     * @param surname      The surname of the administrator.
      */
-    public Administrator (String emailAddress, String password, String title, String forename, String surname) {
-        super (emailAddress, password, title, forename, surname);
+    public Administrator(String emailAddress, String password, String title, String forename, String surname) {
+        super(emailAddress, password, title, forename, surname);
 
     }
 
@@ -37,23 +38,21 @@ public class Administrator extends Account {
      *
      * @return String to print out the Administrator.
      */
-    public String toString () {
+    public String toString() {
         String result = "This is an Administrator.\n";
-        result += super.toString ();
+        result += super.toString();
         return result;
     }
 
     /**
      * Adds a new user account.
-     * Granting privileges should be inherent to the type of the account created. For example, the front-end should see
-     * that a given account belongs to the Student table. From that account, a user should only be able to see a 'view status' screen.
      *
-     * @param accountType The type of the account to be created, e.g. administrator or student.
+     * @param accountType  The type of the account to be created, e.g. administrator or student.
      * @param emailAddress The email address of the new user account.
-     * @param password The password of the new user account.
-     * @param title The title the new user account has, such as Mister or Doctor.
-     * @param forename The forename of the new user account.
-     * @param surname The surname of the new user account.
+     * @param password     The password of the new user account.
+     * @param title        The title the new user account has, such as Mister or Doctor.
+     * @param forename     The forename of the new user account.
+     * @param surname      The surname of the new user account.
      */
     public void addUser(String accountType, String emailAddress, String password, String title, String forename, String surname) {
 
@@ -63,18 +62,21 @@ public class Administrator extends Account {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("%s %s %s %s %s", emailAddress, password, title, forename, surname);
+            String toInsert = String.format("('%s', '%s', '%s', '%s', '%s')", emailAddress, password, title, forename, surname);
             statement.executeUpdate("INSERT INTO " + accountType + " VALUES " + toInsert);
 
-        }
-
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
 
         }
 
     }
 
+    /**
+     * Deletes a user account.
+     *
+     * @param emailAddress The email address of the account to be deleted.
+     */
     public void removeUser(String emailAddress) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
@@ -84,14 +86,55 @@ public class Administrator extends Account {
             statement = con.createStatement();
             statement.executeUpdate("DELETE FROM * " + "WHERE Email = " + emailAddress);
 
-        }
-
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
 
         }
 
+    }
+
+    /**
+     * Adds a new department.
+     *
+     * @param name The name of the department to be added.
+     * @param code The code of the department to be added.
+     */
+    public void addDepartment(String name, String code) {
+
+        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+
+            String toInsert = String.format("('%s', '%s')", name, code);
+            statement.executeUpdate("INSERT INTO departments " + "VALUES " + toInsert);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
 
     }
 
+    /**
+     * Deletes a department.
+     *
+     * @param code The code of the department to be deleted.
+     */
+    public void removeDepartment(String code) {
+
+        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+            statement.executeUpdate("DELETE FROM Departments " + "WHERE Code = " + code);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+
+    }
 }
