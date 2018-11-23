@@ -47,14 +47,13 @@ public class Administrator extends Account {
     /**
      * Adds a new user account.
      *
-     * @param accountType  The type of the account to be created, e.g. administrator or student.
+     * @param accountType The type of the account be created. Used in granting privileges.
      * @param emailAddress The email address of the new user account.
      * @param password     The password of the new user account.
-     * @param title        The title the new user account has, such as Mister or Doctor.
-     * @param forename     The forename of the new user account.
-     * @param surname      The surname of the new user account.
      */
-    public void addUser(String accountType, String emailAddress, String password, String title, String forename, String surname) {
+    public void addUser(String accountType, String emailAddress, String password) {
+
+        createRoles();
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -62,8 +61,28 @@ public class Administrator extends Account {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("('%s', '%s', '%s', '%s', '%s')", emailAddress, password, title, forename, surname);
-            statement.executeUpdate("INSERT INTO " + accountType + " VALUES " + toInsert);
+            String toCreate = String.format("CREATE USER '%s'@'localhost' IDENTIFIED BY '%s'", emailAddress, password);
+            statement.execute(toCreate);
+
+            String toGrant = "";
+
+            if (accountType.equalsIgnoreCase("administrator")) {
+                toGrant = String.format("GRANT 'Administrator' TO '%s'@'localhost'", emailAddress);
+
+            } else if (accountType.equalsIgnoreCase("registrar")) {
+                toGrant = String.format("GRANT 'Registrar' TO '%s'@'localhost'", emailAddress);
+
+            } else if (accountType.equalsIgnoreCase("teacher")) {
+                toGrant = String.format("GRANT 'Teacher' TO '%s'@'localhost'", emailAddress);
+
+            } else if (accountType.equalsIgnoreCase("student")) {
+                toGrant = String.format("GRANT 'Student' TO '%s'@'localhost' WHERE Email = %s", emailAddress, emailAddress);
+
+            }
+
+            statement.execute(toGrant);
+
+            statement.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -84,7 +103,9 @@ public class Administrator extends Account {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM * " + "WHERE Email = " + emailAddress);
+
+            String toRemove = String.format("DROP USER %s CASCADE", emailAddress);
+            statement.execute(toRemove);
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -108,7 +129,7 @@ public class Administrator extends Account {
             statement = con.createStatement();
 
             String toInsert = String.format("('%s', '%s')", name, code);
-            statement.executeUpdate("INSERT INTO departments " + "VALUES " + toInsert);
+            statement.executeUpdate("INSERT INTO Departments " + "VALUES " + toInsert);
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -137,4 +158,49 @@ public class Administrator extends Account {
         }
 
     }
+
+    /**
+     * Creates user roles if they don't yet exist
+     */
+    private void createRoles() {
+
+        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+
+            statement.execute("IF DATABASE_PRINCIPAL_ID('Administrator') IS NULL" +
+                    " BEGIN" +
+                    " CREATE ROLE Administrator" +
+                    " GRANT INSERT, DROP, DELETE ON * . * TO Administrator WITH GRANT OPTION" +
+                    " END");
+
+            statement.execute("IF DATABASE_PRINCIPAL_ID('Registrar') IS NULL" +
+                    " BEGIN" +
+                    " CREATE ROLE Registrar" +
+                    " GRANT ALL ON Students TO Registrar" +
+                    " END");
+
+            statement.execute("IF DATABASE_PRINCIPAL_ID('Teacher') IS NULL" +
+                    " BEGIN" +
+                    " CREATE ROLE Teacher" +
+                    " GRANT ALL ON Students TO Teacher" +
+                    " END");
+
+            statement.execute("IF DATABASE_PRINCIPAL_ID('Student') IS NULL" +
+                    " BEGIN" +
+                    " CREATE ROLE Student" +
+                    " GRANT SELECT ON Students TO Student" +
+                    " END");
+
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+
+    }
+
 }
