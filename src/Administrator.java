@@ -66,17 +66,11 @@ public class Administrator extends Account {
 
             String toGrant = "";
 
-            if (accountType.equalsIgnoreCase("administrator")) {
-                toGrant = String.format("GRANT 'Administrator' TO '%s'@'localhost'", emailAddress);
+            if (accountType.toLowerCase().equals("student")) {
+                toGrant = String.format("GRANT 'student' TO '%s'@'localhost' WHERE Email = %s", emailAddress, emailAddress);
 
-            } else if (accountType.equalsIgnoreCase("registrar")) {
-                toGrant = String.format("GRANT 'Registrar' TO '%s'@'localhost'", emailAddress);
-
-            } else if (accountType.equalsIgnoreCase("teacher")) {
-                toGrant = String.format("GRANT 'Teacher' TO '%s'@'localhost'", emailAddress);
-
-            } else if (accountType.equalsIgnoreCase("student")) {
-                toGrant = String.format("GRANT 'Student' TO '%s'@'localhost' WHERE Email = %s", emailAddress, emailAddress);
+            } else {
+                toGrant = String.format("GRANT '%s' TO '%s'@'localhost'", accountType.toLowerCase(), emailAddress);
 
             }
 
@@ -170,28 +164,28 @@ public class Administrator extends Account {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('Administrator') IS NULL" +
+            statement.execute("IF DATABASE_PRINCIPAL_ID('administrator') IS NULL" +
                     " BEGIN" +
-                    " CREATE ROLE Administrator" +
-                    " GRANT INSERT, DROP, DELETE ON * . * TO Administrator WITH GRANT OPTION" +
+                    " CREATE ROLE administrator" +
+                    " GRANT INSERT, DROP, DELETE ON * . * TO administrator WITH GRANT OPTION" +
                     " END");
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('Registrar') IS NULL" +
+            statement.execute("IF DATABASE_PRINCIPAL_ID('registrar') IS NULL" +
                     " BEGIN" +
-                    " CREATE ROLE Registrar" +
-                    " GRANT ALL ON Students TO Registrar" +
+                    " CREATE ROLE registrar" +
+                    " GRANT ALL ON Students TO registrar" +
                     " END");
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('Teacher') IS NULL" +
+            statement.execute("IF DATABASE_PRINCIPAL_ID('teacher') IS NULL" +
                     " BEGIN" +
-                    " CREATE ROLE Teacher" +
-                    " GRANT ALL ON Students TO Teacher" +
+                    " CREATE ROLE teacher" +
+                    " GRANT ALL ON Students TO teacher" +
                     " END");
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('Student') IS NULL" +
+            statement.execute("IF DATABASE_PRINCIPAL_ID('student') IS NULL" +
                     " BEGIN" +
-                    " CREATE ROLE Student" +
-                    " GRANT SELECT ON Students TO Student" +
+                    " CREATE ROLE student" +
+                    " GRANT SELECT ON Students TO student" +
                     " END");
 
             statement.close();
