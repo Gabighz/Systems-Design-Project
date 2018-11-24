@@ -167,7 +167,7 @@ public class Administrator extends Account {
             statement.execute("IF DATABASE_PRINCIPAL_ID('administrator') IS NULL" +
                     " BEGIN" +
                     " CREATE ROLE administrator" +
-                    " GRANT INSERT, DROP, DELETE ON * . * TO administrator WITH GRANT OPTION" +
+                    " GRANT INSERT, DROP, DELETE, CREATE TABLE ON * . * TO administrator WITH GRANT OPTION" +
                     " END");
 
             statement.execute("IF DATABASE_PRINCIPAL_ID('registrar') IS NULL" +
@@ -179,7 +179,7 @@ public class Administrator extends Account {
             statement.execute("IF DATABASE_PRINCIPAL_ID('teacher') IS NULL" +
                     " BEGIN" +
                     " CREATE ROLE teacher" +
-                    " GRANT ALL ON Students TO teacher" +
+                    " GRANT UPDATE, SELECT ON Students TO teacher" +
                     " END");
 
             statement.execute("IF DATABASE_PRINCIPAL_ID('student') IS NULL" +
