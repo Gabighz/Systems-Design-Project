@@ -17,19 +17,12 @@
 
 import java.sql.*;
 
-public class Administrator extends Account {
+public class Administrator {
 
     /**
      * Constructs an Administrator
-     *
-     * @param emailAddress The email address of the administrator.
-     * @param password     The password of the administrator.
-     * @param title        The title the administrator has, such as Mister.
-     * @param forename     The forename of the administrator.
-     * @param surname      The surname of the administrator.
      */
-    public Administrator(String emailAddress, String password, String title, String forename, String surname) {
-        super(emailAddress, password, title, forename, surname);
+    public Administrator() {
 
     }
 
@@ -39,9 +32,7 @@ public class Administrator extends Account {
      * @return String to print out the Administrator.
      */
     public String toString() {
-        String result = "This is an Administrator.\n";
-        result += super.toString();
-        return result;
+        return "This is an Administrator.";
     }
 
     /**
