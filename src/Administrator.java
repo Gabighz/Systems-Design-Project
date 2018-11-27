@@ -44,8 +44,6 @@ public class Administrator {
      */
     public void addUser(String accountType, String emailAddress, String password) {
 
-        createRoles();
-
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
@@ -115,13 +113,6 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            statement.execute("CREATE TABLE IF NOT EXISTS Departments" +
-                            "(" +
-                            "DepartmentCode  VARCHAR(3) NOT NULL, " +
-                            "Name  VARCHAR(255) NOT NULL, " +
-                            "PRIMARY KEY(DepartmentCode)" +
-                            ");");
-
             String toInsert = String.format("('%s', '%s')", name, code);
             statement.executeUpdate("INSERT INTO Departments " + "VALUES " + toInsert);
 
@@ -170,15 +161,6 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-
-            statement.execute("CREATE TABLE IF NOT EXISTS Degrees" +
-                    "(" +
-                    "DegreeCode  VARCHAR(6) NOT NULL, " +
-                    "Name  VARCHAR(255) NOT NULL, " +
-                    "DepartmentCode VARCHAR(3) NOT NULL, " +
-                    "PRIMARY KEY(DegreeCode), " +
-                    "FOREIGN KEY(DepartmentCode) REFERENCES Departments(DepartmentCode)" +
-                    ");");
 
             String leadDepartment = code.substring(0, 3);
 
@@ -236,15 +218,6 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            statement.execute("CREATE TABLE IF NOT EXISTS Modules" +
-                    "(" +
-                    "ModuleCode  VARCHAR(7) NOT NULL, " +
-                    "Name  VARCHAR(255) NOT NULL, " +
-                    "CalendarType VARCHAR(13), " +
-                    "Credits INT(2), " +
-                    "PRIMARY KEY(ModuleCode)" +
-                    ");");
-
             String toInsertModule = String.format("('%s', '%s', '%s', '%d')", name, code, calendarType, credits);
             statement.executeUpdate("INSERT INTO Modules " + "VALUES " + toInsertModule);
 
@@ -273,17 +246,6 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            statement.execute("CREATE TABLE IF NOT EXISTS Approval" +
-                    "(" +
-                    "ModuleCode  VARCHAR(7) NOT NULL, " +
-                    "DegreeCode  VARCHAR(6) NOT NULL, " +
-                    "Level  CHAR(1), " +
-                    "Core  BOOLEAN, " +
-                    "PRIMARY KEY(ModuleCode, DegreeCode, Level), " +
-                    "FOREIGN KEY(ModuleCode) REFERENCES Modules(ModuleCode), " +
-                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
-                    ");");
-
             String toInsert = String.format("('%s', '%s', '%c', '%b')", moduleCode, degreeCode, level, isCore);
             statement.executeUpdate("INSERT INTO Approval " + "VALUES " + toInsert);
 
@@ -310,50 +272,6 @@ public class Administrator {
             statement = con.createStatement();
             statement.executeUpdate("DELETE FROM Modules " + "WHERE ModuleCode = " + code);
             statement.executeUpdate("DELETE FROM Approval " + "WHERE ModuleCode = " + code);
-
-            statement.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        }
-
-    }
-
-    /**
-     * Creates user roles if they don't yet exist
-     */
-    private void createRoles() {
-
-        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
-        Statement statement = null;
-
-        try (Connection con = DriverManager.getConnection(DB)) {
-            statement = con.createStatement();
-
-            statement.execute("IF DATABASE_PRINCIPAL_ID('administrator') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE administrator" +
-                    " GRANT INSERT, DROP, DELETE, CREATE TABLE ON * . * TO administrator WITH GRANT OPTION" +
-                    " END");
-
-            statement.execute("IF DATABASE_PRINCIPAL_ID('registrar') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE registrar" +
-                    " GRANT ALL ON Students TO registrar" +
-                    " END");
-
-            statement.execute("IF DATABASE_PRINCIPAL_ID('teacher') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE teacher" +
-                    " GRANT UPDATE, SELECT ON Students TO teacher" +
-                    " END");
-
-            statement.execute("IF DATABASE_PRINCIPAL_ID('student') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE student" +
-                    " GRANT SELECT ON Students TO student" +
-                    " END");
 
             statement.close();
 
