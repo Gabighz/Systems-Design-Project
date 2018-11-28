@@ -49,6 +49,17 @@ public class Database {
                     "PRIMARY KEY(ModuleCode)" +
                     ");");
 
+            statement.execute("CREATE TABLE IF NOT EXISTS Approval" +
+                    "(" +
+                    "ModuleCode  VARCHAR(7) NOT NULL, " +
+                    "DegreeCode  VARCHAR(6) NOT NULL, " +
+                    "Level  CHAR(1), " +
+                    "Core  BOOLEAN, " +
+                    "PRIMARY KEY(ModuleCode, DegreeCode, Level), " +
+                    "FOREIGN KEY(ModuleCode) REFERENCES Modules(ModuleCode), " +
+                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
+                    ");");
+
             statement.execute("CREATE TABLE IF NOT EXISTS Grades" +
                     "(" +
                     "InitialGrade  REAL, " +
