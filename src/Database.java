@@ -7,7 +7,7 @@
 import java.sql.*;
 
 public class Database {
-    public static void main() {
+    public static void main(String args[]) {
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
@@ -66,8 +66,8 @@ public class Database {
                     "ResitGrade  REAL, " +
                     "ModuleCode  VARCHAR(7) NOT NULL, " +
                     "RegNo VARCHAR(255) NOT NULL, " +
-                    "PRIMARY KEY(ModuleCode,RegNo)" +
-                    "FOREIGN KEY(ModuleCode) REFERENCES Modules(ModuleCode)" +
+                    "PRIMARY KEY(ModuleCode,RegNo), " +
+                    "FOREIGN KEY(ModuleCode) REFERENCES Modules(ModuleCode), " +
                     "FOREIGN KEY(RegNo) REFERENCES Students(RegNo)" +
                     ");");
 
@@ -78,8 +78,8 @@ public class Database {
                     "EndDate  REAL NOT NULL, " +
                     "DegreeCode  VARCHAR(6) NOT NULL, " +
                     "RegNo VARCHAR(255) NOT NULL, " +
-                    "PRIMARY KEY(DegreeCode,RegNo)" +
-                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
+                    "PRIMARY KEY(DegreeCode,RegNo), " +
+                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
                     "FOREIGN KEY(RegNo) REFERENCES Students(RegNo)" +
                     ");");
 
@@ -88,33 +88,22 @@ public class Database {
                     "Name  VARCHAR(255) NOT NULL, " +
                     "LevelCode  VARCHAR(1) NOT NULL, " +
                     "DegreeCode  VARCHAR(6) NOT NULL, " +
-                    "PRIMARY KEY(DegreeCode,LevelCode)" +
+                    "PRIMARY KEY(DegreeCode,LevelCode), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
                     ");");
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('administrator') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE administrator" +
-                    " GRANT INSERT, DROP, DELETE, CREATE TABLE ON * . * TO administrator WITH GRANT OPTION" +
-                    " END");
+            /*statement.executeUpdate("CREATE ROLE administrator;");
+            statement.execute("GRANT INSERT, DROP, DELETE, CREATE TABLE ON * . * TO administrator WITH GRANT OPTION;");
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('registrar') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE registrar" +
-                    " GRANT ALL ON Students TO registrar" +
-                    " END");
+            statement.execute("CREATE OR REPLACE ROLE registrar;");
+            statement.execute("GRANT ALL ON Students TO registrar;");
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('teacher') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE teacher" +
-                    " GRANT UPDATE, SELECT ON Students TO teacher" +
-                    " END");
+            statement.execute("CREATE OR REPLACE ROLE teacher;");
+            statement.execute("GRANT UPDATE, SELECT ON Students TO teacher;");
 
-            statement.execute("IF DATABASE_PRINCIPAL_ID('student') IS NULL" +
-                    " BEGIN" +
-                    " CREATE ROLE student" +
-                    " GRANT SELECT ON Students TO student" +
-                    " END");
+            statement.execute("CREATE OR REPLACE ROLE student;");
+            statement.execute("GRANT SELECT ON Students TO student;");*/
+
 
 
             statement.close();
