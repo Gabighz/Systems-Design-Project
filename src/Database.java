@@ -1,5 +1,5 @@
 /**
- * This class creates a database.
+ * This class resets the database.
  *
  * @author Alexandre Gauthier
  */
@@ -7,12 +7,30 @@
 import java.sql.*;
 
 public class Database {
-    public static void main(String args[]) {
+    public static void main (String args[]) {
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
+
+            statement.execute("DROP TABLE IF EXISTS Level;");
+            statement.execute("DROP TABLE IF EXISTS PeriodOfStudy;");
+            statement.execute("DROP TABLE IF EXISTS Grades;");
+            statement.execute("DROP TABLE IF EXISTS Approval;");
+            statement.execute("DROP TABLE IF EXISTS Modules;");
+            statement.execute("DROP TABLE IF EXISTS Degrees;");
+            statement.execute("DROP TABLE IF EXISTS Departments;");
+            statement.execute("DROP TABLE IF EXISTS Students;");
+            statement.execute("DROP TABLE IF EXISTS Account;");
+
+            statement.execute("CREATE TABLE IF NOT EXISTS Account" +
+                    "(" +
+                    "Email VARCHAR(255) NOT NULL, " +
+                    "Password VARCHAR(255) NOT NULL, " +
+                    "Salt VARCHAR(255) NOT NULL, " +
+                    "PRIMARY KEY(Email)" +
+                    ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Students" +
                     "(" +
@@ -20,8 +38,10 @@ public class Database {
                     "Forename VARCHAR(255) NOT NULL, " +
                     "Surname VARCHAR(255) NOT NULL, " +
                     "RegNo VARCHAR(255) NOT NULL, " +
+                    "Email VARCHAR(255) NOT NULL, " +
                     "Tutor VARCHAR(255), " +
-                    "PRIMARY KEY(RegNo)" +
+                    "PRIMARY KEY(RegNo,Email)" +
+                    "FOREIGN KEY(Email) REFERENCES Account(Email)" +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Departments" +
@@ -76,9 +96,10 @@ public class Database {
                     "Label  VARCHAR(1) NOT NULL, " +
                     "StartDate  REAL NOT NULL, " +
                     "EndDate  REAL NOT NULL, " +
+                    "Level  CHAR(1), " +
                     "DegreeCode  VARCHAR(6) NOT NULL, " +
                     "RegNo VARCHAR(255) NOT NULL, " +
-                    "PRIMARY KEY(DegreeCode,RegNo), " +
+                    "PRIMARY KEY(Label,RegNo), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
                     "FOREIGN KEY(RegNo) REFERENCES Students(RegNo)" +
                     ");");
@@ -107,6 +128,7 @@ public class Database {
 
 
             statement.close();
+            System.out.println("Statement closed.");
 
         } catch (SQLException ex) {
             ex.printStackTrace();
