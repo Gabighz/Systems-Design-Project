@@ -75,8 +75,7 @@ public class Administrator {
             System.err.println("Digest is a null pointer.");
 
         }
-
-
+        
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
