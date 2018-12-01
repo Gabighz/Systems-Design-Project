@@ -65,20 +65,20 @@ public class Main {
                 try {
                     hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
 
+                    if (password.equals(hashedPassword.toString())) {
+                        System.out.println("Log-in successful!");
+                        success = true;
+
+                    } else {
+                        System.out.println("Wrong password");
+
+                    }
+
                 } catch (NullPointerException e) {
                     System.err.println("Digest is a null pointer.");
 
                 }
-
-                if (password.equals(hashedPassword.toString())) {
-                    System.out.println("Log-in successful!");
-                    success = true;
-
-                } else {
-                    System.out.println("Wrong password");
-                    
-                }
-
+                
             }
 
             statement.close();
