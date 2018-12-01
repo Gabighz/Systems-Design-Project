@@ -20,11 +20,11 @@ public class Main {
      * @param emailAddress       The given email address for logging in.
      * @param passwordToHash     The corresponding password for logging in.
      */
-    public Boolean logIn(String emailAddress, String passwordToHash) {
+    public boolean logIn(String emailAddress, String passwordToHash) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
-        Boolean success = false;
+        boolean success = false;
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
@@ -78,7 +78,7 @@ public class Main {
                     System.err.println("Digest is a null pointer.");
 
                 }
-                
+
             }
 
             statement.close();
