@@ -20,10 +20,11 @@ public class Main {
      * @param emailAddress       The given email address for logging in.
      * @param passwordToHash     The corresponding password for logging in.
      */
-    public void logIn(String emailAddress, String passwordToHash) {
+    public Boolean logIn(String emailAddress, String passwordToHash) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
+        Boolean success = false;
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
@@ -71,8 +72,11 @@ public class Main {
 
                 if (password.equals(hashedPassword.toString())) {
                     System.out.println("Log-in successful!");
+                    success = true;
+
                 } else {
                     System.out.println("Wrong password");
+                    
                 }
 
             }
@@ -83,6 +87,8 @@ public class Main {
             ex.printStackTrace();
 
         }
+
+        return success;
 
     }
 
