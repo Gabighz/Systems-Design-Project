@@ -16,8 +16,10 @@
  */
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.security.SecureRandom;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
 
 public class Administrator {
 
@@ -40,38 +42,48 @@ public class Administrator {
     /**
      * Adds a new user account.
      *
-     * @param accountType The type of the account be created. Used in granting privileges.
-     * @param emailAddress The email address of the new user account.
-     * @param password     The password of the new user account.
+     * @param role               The role of the owner of the account.
+     * @param emailAddress       The email address of the new user account.
+     * @param passwordToHash     The unhashed password of the new user account.
      */
-    public void addUser(String accountType, String emailAddress, String password) {
+    public void addUser(String role, String emailAddress, String passwordToHash) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        MessageDigest md = null;
+
+        try {
+            md = MessageDigest.getInstance("SHA-512");
+            md.update(salt);
+
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("SHA-512 is not a valid message digest algorithm");
+
+        }
+
+        byte[] hashedPassword = null;
+
+        try {
+            hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
+
+        } catch (NullPointerException e) {
+            System.err.println("Digest is a null pointer.");
+
+        }
+
+
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toCreate = String.format("CREATE USER '%s'@'localhost' IDENTIFIED BY '%s'", emailAddress, password);
-            statement.execute(toCreate);
+            String toInsert = String.format("('%s', '%s', '%s', '%s')", emailAddress, hashedPassword.toString(),
+                                                                        salt.toString(), role);
 
-            String toGrant = "";
-
-            if (accountType.toLowerCase().equals("administrator")) {
-                toGrant = String.format("GRANT INSERT, DROP, DELETE, CREATE TABLE ON * . * TO '%s'@'localhost' WITH GRANT OPTION;", emailAddress);
-
-            } else if (accountType.toLowerCase().equals("teacher")) {
-                toGrant = String.format("GRANT ALL ON Students TO '%s'@'localhost'", emailAddress);
-
-            } else if (accountType.toLowerCase().equals("registrar")) {
-                toGrant = String.format("GRANT UPDATE, SELECT ON Students TO '%s'@'localhost'", emailAddress);
-
-            } else if (accountType.toLowerCase().equals("student")) {
-                toGrant = String.format("GRANT SELECT ON Students TO '%s'@'localhost' WHERE Email = '%s'", emailAddress, emailAddress);
-
-            }
-
-            statement.execute(toGrant);
+            statement.executeUpdate("INSERT INTO Accounts VALUES " + toInsert);
 
             statement.close();
 
@@ -95,7 +107,7 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toRemove = String.format("DROP USER %s CASCADE", emailAddress);
+            String toRemove = String.format("DELETE FROM Accounts WHERE Email='%s'", emailAddress);
             statement.execute(toRemove);
 
             statement.close();
@@ -122,7 +134,7 @@ public class Administrator {
             statement = con.createStatement();
 
             String toInsert = String.format("('%s', '%s')", name, code);
-            statement.executeUpdate("INSERT INTO Departments " + "VALUES " + toInsert);
+            statement.executeUpdate("INSERT INTO Departments VALUES " + toInsert);
 
             statement.close();
 
@@ -145,7 +157,7 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM Departments " + "WHERE DepartmentCode = " + code);
+            statement.executeUpdate("DELETE FROM Departments WHERE DepartmentCode = " + code);
 
             statement.close();
 
@@ -173,7 +185,7 @@ public class Administrator {
             String leadDepartment = code.substring(0, 3);
 
             String toInsert = String.format("('%s', '%s', '%s')", name, code, leadDepartment);
-            statement.executeUpdate("INSERT INTO Degrees " + "VALUES " + toInsert);
+            statement.executeUpdate("INSERT INTO Degrees VALUES " + toInsert);
 
             statement.close();
 
@@ -196,7 +208,7 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM Degrees " + "WHERE DegreeCode = " + code);
+            statement.executeUpdate("DELETE FROM Degrees WHERE DegreeCode = " + code);
 
             statement.close();
 
@@ -210,13 +222,13 @@ public class Administrator {
     /**
      * Adds a new module.
      *
-     * @param name The name of the module to be added.
-     * @param code The code of the module to be added.
+     * @param name         The name of the module to be added.
+     * @param code         The code of the module to be added.
      * @param calendarType Specifies if a module is taught taught either in autumn, in spring, over
-     * the summer or across the academic year. E.g. "AUTUMN", "SPRING", "SUMMER", "ACADEMIC YEAR".
-     * @param credits The number of credits the module carries, by default:
-     *                20 credits in level 1-3, 15 in level 4,
-     *                40 credits for undergraduate dissertations, 60 credits for masters' dissertations
+     *                     the summer or across the academic year. E.g. "AUTUMN", "SPRING", "SUMMER", "ACADEMIC YEAR".
+     * @param credits      The number of credits the module carries, by default:
+     *                     20 credits in level 1-3, 15 in level 4,
+         *                 40 credits for undergraduate dissertations, 60 credits for masters' dissertations
      */
     public void addModule(String name, String code, String calendarType, int credits) {
 
@@ -227,7 +239,7 @@ public class Administrator {
             statement = con.createStatement();
 
             String toInsertModule = String.format("('%s', '%s', '%s', '%d')", name, code, calendarType, credits);
-            statement.executeUpdate("INSERT INTO Modules " + "VALUES " + toInsertModule);
+            statement.executeUpdate("INSERT INTO Modules VALUES " + toInsertModule);
 
             statement.close();
 
@@ -243,8 +255,8 @@ public class Administrator {
      *
      * @param moduleCode The code of the module to be linked.
      * @param degreeCode The code of the degree to be for which it is approved.
-     * @param level The level of study for which it is approved.
-     * @param isCore Whether the module is core or not.
+     * @param level      The level of study for which it is approved.
+     * @param isCore     Whether the module is core or not.
      */
     public void linkModule(String moduleCode, String degreeCode, int level, boolean isCore) {
 
@@ -255,7 +267,7 @@ public class Administrator {
             statement = con.createStatement();
 
             String toInsert = String.format("('%s', '%s', '%c', '%b')", moduleCode, degreeCode, level, isCore);
-            statement.executeUpdate("INSERT INTO Approval " + "VALUES " + toInsert);
+            statement.executeUpdate("INSERT INTO Approval VALUES " + toInsert);
 
             statement.close();
 
@@ -278,8 +290,8 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM Modules " + "WHERE ModuleCode = " + code);
-            statement.executeUpdate("DELETE FROM Approval " + "WHERE ModuleCode = " + code);
+            statement.executeUpdate("DELETE FROM Modules WHERE ModuleCode = " + code);
+            statement.executeUpdate("DELETE FROM Approval WHERE ModuleCode = " + code);
 
             statement.close();
 
