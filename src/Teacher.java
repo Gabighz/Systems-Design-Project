@@ -34,25 +34,25 @@ public class Teacher {
      * @param moduleCode The module code.
      * @param resit If the grade is a resit grade or not.
      */
-    public void addGrade(Float grade, int regNo, String moduleCode, Boolean resit) {
+    public void addGrade(Double grade, int regNo, String moduleCode, Boolean resit) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
-        Float initialGrade = null;
-        Float resitGrade = null;
-
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
+            String toExecute;
 
-            if (resit)
-                resitGrade = grade;
-            else
-                initialGrade = grade;
-
-            String toExecute = String.format("INSERT INTO Grade (InitialGrade, ResitGrade, RegNo, ModuleCode) " +
-                    "VALUES('%s', '%s', '%s', '%s') ON DUPLICATE KEY UPDATE InitialGrade='%s', ResitGrade='%s'",
-                    initialGrade, resitGrade, regNo, moduleCode, initialGrade, resitGrade);
+            if (resit) {
+                toExecute = String.format("INSERT INTO Grades (ResitGrade, RegNo, ModuleCode) " +
+                                "VALUES('%s', '%s', '%s') ON DUPLICATE KEY UPDATE ResitGrade='%s'",
+                        grade, regNo, moduleCode, grade);
+            }
+            else{
+                toExecute = String.format("INSERT INTO Grades (InitialGrade, RegNo, ModuleCode) " +
+                                "VALUES('%s', '%s', '%s') ON DUPLICATE KEY UPDATE InitialGrade='%s'",
+                        grade, regNo, moduleCode, grade);
+            }
             statement.executeUpdate(toExecute);
 
             statement.close();
@@ -70,7 +70,7 @@ public class Teacher {
      * @param moduleCode The module code.
      * @param resit If the grade is a resit grade or not.
      */
-    public void updateGrade(Float grade, int regNo, String moduleCode, Boolean resit) {
+    public void updateGrade(Double grade, int regNo, String moduleCode, Boolean resit) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -80,11 +80,11 @@ public class Teacher {
             String toExecute;
 
             if (resit) {
-                toExecute = String.format("UPDATE Grade SET ResitGrade='%s' " +
+                toExecute = String.format("UPDATE Grades SET ResitGrade='%s' " +
                         "WHERE regNo='%s' AND moduleCode='%s'", grade, regNo, moduleCode);
             }
             else {
-                toExecute = String.format("UPDATE Grade SET InitialGrade='%s' " +
+                toExecute = String.format("UPDATE Grades SET InitialGrade='%s' " +
                         "WHERE RegNo='%s' AND ModuleCode='%s'", grade, regNo, moduleCode);
             }
 
@@ -195,6 +195,7 @@ public class Teacher {
         }
 
         return null;
+
     }
 
     /**
@@ -205,6 +206,7 @@ public class Teacher {
      * @returns true if student can progress, false if not.
      */
     public Boolean progress(int meanGrade, String degreeClass) {
+
         if (degreeClass.equals("1-year MSc") || degreeClass.equals("MComp") || degreeClass.equals("MEng")) {
             if (meanGrade < 49.5)
                 return false;
@@ -218,6 +220,7 @@ public class Teacher {
                 return true;
         }
         return null;
+
     }
 
 
@@ -230,6 +233,7 @@ public class Teacher {
      * @returns the student degree result.
      */
     public String degreeResult(int meanGrade, String degreeClass) {
+
         if (degreeClass.equals("1-year MSc")) {
             if (meanGrade < 49.5)
                 return "fail";
@@ -265,6 +269,7 @@ public class Teacher {
                 return "first class";
         }
         return null;
+
     }
 
 
@@ -275,4 +280,61 @@ public class Teacher {
      * @returns The student status.
      */
     /** public String viewStatus(int regNo) { return Student.viewStatus(regNo); } */
+
+
+
+    public static void main(String[] args) {
+
+        Administrator admin = new Administrator();
+        admin.addUser("student", "email@email", "12345");
+
+        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+            statement.executeUpdate("INSERT INTO Students VALUES ('Mr', 'A', 'G', '123', 'email@email','tutor');");
+
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        admin.addDepartment("Computer Science", "COM");
+        admin.addDegree("Bsc Comp", "COMU03");
+        admin.addModule("Systems Design and Security", "COM1001", "AUT", 20);
+        admin.linkModule("COM1001", "COMU03", '1', true);
+
+        Teacher teacher = new Teacher();
+        teacher.addGrade(78.1, 123, "COM1001", false);
+        teacher.updateGrade(67.1, 123, "COM1001", false);
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+            statement.executeUpdate("DELETE FROM Grades WHERE RegNo=123 AND ModuleCode='COM1001';");
+
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        admin.removeModule("COM1001");
+        admin.removeDegree("COMU03");
+        admin.removeDepartment("COM");
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+            statement.executeUpdate("DELETE FROM Students WHERE Email='email@email';");
+
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        admin.removeUser("email@email");
+
+    }
 }
