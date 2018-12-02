@@ -22,9 +22,9 @@ public class Database {
             statement.execute("DROP TABLE IF EXISTS Degrees;");
             statement.execute("DROP TABLE IF EXISTS Departments;");
             statement.execute("DROP TABLE IF EXISTS Students;");
-            statement.execute("DROP TABLE IF EXISTS Account;");
+            statement.execute("DROP TABLE IF EXISTS Accounts;");
 
-            statement.execute("CREATE TABLE IF NOT EXISTS Account" +
+            statement.execute("CREATE TABLE IF NOT EXISTS Accounts" +
                     "(" +
                     "Email VARCHAR(255) NOT NULL, " +
                     "Password VARCHAR(255) NOT NULL, " +

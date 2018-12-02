@@ -301,35 +301,4 @@ public class Administrator {
 
     }
 
-    public static void main(String[] args) {
-        System.out.println("eragws");
-        Administrator admin = new Administrator();
-        admin.addUser("student", "abc", "123");
-        System.out.println("eragws");
-
-        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
-        Statement statement = null;
-
-        try (Connection con = DriverManager.getConnection(DB)) {
-            statement = con.createStatement();
-
-            String toQuery = String.format("SELECT * FROM USER");
-            ResultSet rs = statement.executeQuery(toQuery);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnsNumber = rsmd.getColumnCount();
-            while (rs.next()) {
-                for (int i = 1; i <= columnsNumber; i++) {
-                    System.out.print(rs.getString(i) + " "); //Print one element of a row
-                }
-                System.out.println();//Move to the next line to print the next row.
-            }
-
-            statement.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        }
-    }
-
 }
