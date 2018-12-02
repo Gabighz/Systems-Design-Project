@@ -35,10 +35,10 @@ public class Database {
 
             statement.execute("CREATE TABLE IF NOT EXISTS Students" +
                     "(" +
-                    "Title VARCHAR(4) NOT NULL, " +
+                    "Title VARCHAR(5) NOT NULL, " +
                     "Forename VARCHAR(255) NOT NULL, " +
                     "Surname VARCHAR(255) NOT NULL, " +
-                    "RegNo VARCHAR(255) NOT NULL, " +
+                    "RegNo INT NOT NULL, " +
                     "Email VARCHAR(255) NOT NULL, " +
                     "Tutor VARCHAR(255), " +
                     "PRIMARY KEY(RegNo), " +
@@ -47,33 +47,33 @@ public class Database {
 
             statement.execute("CREATE TABLE IF NOT EXISTS Departments" +
                     "(" +
-                    "DepartmentCode  VARCHAR(3) NOT NULL, " +
                     "Name  VARCHAR(255) NOT NULL, " +
+                    "DepartmentCode  VARCHAR(4) NOT NULL, " +
                     "PRIMARY KEY(DepartmentCode)" +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Degrees" +
                     "(" +
-                    "DegreeCode  VARCHAR(6) NOT NULL, " +
                     "Name  VARCHAR(255) NOT NULL, " +
-                    "DepartmentCode VARCHAR(3) NOT NULL, " +
+                    "DegreeCode  VARCHAR(7) NOT NULL, " +
+                    "DepartmentCode VARCHAR(4) NOT NULL, " +
                     "PRIMARY KEY(DegreeCode), " +
                     "FOREIGN KEY(DepartmentCode) REFERENCES Departments(DepartmentCode)" +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Modules" +
                     "(" +
-                    "ModuleCode  VARCHAR(7) NOT NULL, " +
                     "Name  VARCHAR(255) NOT NULL, " +
+                    "ModuleCode  VARCHAR(8) NOT NULL, " +
                     "CalendarType VARCHAR(13), " +
-                    "Credits INT(2), " +
+                    "Credits INT(3), " +
                     "PRIMARY KEY(ModuleCode)" +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Approval" +
                     "(" +
-                    "ModuleCode  VARCHAR(7) NOT NULL, " +
-                    "DegreeCode  VARCHAR(6) NOT NULL, " +
+                    "ModuleCode  VARCHAR(8) NOT NULL, " +
+                    "DegreeCode  VARCHAR(7) NOT NULL, " +
                     "Level  CHAR(1), " +
                     "Core  BOOLEAN, " +
                     "PRIMARY KEY(ModuleCode, DegreeCode, Level), " +
@@ -85,8 +85,8 @@ public class Database {
                     "(" +
                     "InitialGrade  REAL, " +
                     "ResitGrade  REAL, " +
-                    "ModuleCode  VARCHAR(7) NOT NULL, " +
-                    "RegNo VARCHAR(255) NOT NULL, " +
+                    "ModuleCode  VARCHAR(8) NOT NULL, " +
+                    "RegNo INT NOT NULL, " +
                     "PRIMARY KEY(ModuleCode,RegNo), " +
                     "FOREIGN KEY(ModuleCode) REFERENCES Modules(ModuleCode), " +
                     "FOREIGN KEY(RegNo) REFERENCES Students(RegNo)" +
@@ -94,12 +94,12 @@ public class Database {
 
             statement.execute("CREATE TABLE IF NOT EXISTS PeriodOfStudy" +
                     "(" +
-                    "Label  VARCHAR(1) NOT NULL, " +
+                    "Label  CHAR(1) NOT NULL, " +
                     "StartDate  REAL NOT NULL, " +
                     "EndDate  REAL NOT NULL, " +
                     "Level  CHAR(1), " +
-                    "DegreeCode  VARCHAR(6) NOT NULL, " +
-                    "RegNo VARCHAR(255) NOT NULL, " +
+                    "DegreeCode  VARCHAR(7) NOT NULL, " +
+                    "RegNo INT NOT NULL, " +
                     "PRIMARY KEY(Label,RegNo), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
                     "FOREIGN KEY(RegNo) REFERENCES Students(RegNo)" +
@@ -108,8 +108,8 @@ public class Database {
             statement.execute("CREATE TABLE IF NOT EXISTS Level" +
                     "(" +
                     "Name  VARCHAR(255) NOT NULL, " +
-                    "LevelCode  VARCHAR(1) NOT NULL, " +
-                    "DegreeCode  VARCHAR(6) NOT NULL, " +
+                    "LevelCode  CHAR(1) NOT NULL, " +
+                    "DegreeCode  VARCHAR(7) NOT NULL, " +
                     "PRIMARY KEY(DegreeCode,LevelCode), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
                     ");");

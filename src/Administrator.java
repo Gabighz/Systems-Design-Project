@@ -155,7 +155,8 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM Departments WHERE DepartmentCode = " + code);
+            String toDelete = String.format("'%s'", code);
+            statement.executeUpdate("DELETE FROM Departments WHERE DepartmentCode=" + toDelete);
 
             statement.close();
 
@@ -206,7 +207,8 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM Degrees WHERE DegreeCode = " + code);
+            String toDelete = String.format("'%s'", code);
+            statement.executeUpdate("DELETE FROM Degrees WHERE DegreeCode=" + toDelete);
 
             statement.close();
 
@@ -261,10 +263,16 @@ public class Administrator {
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
+        int core;
+        if (isCore)
+            core = 1;
+        else
+            core = 0;
+
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("('%s', '%s', '%c', '%b')", moduleCode, degreeCode, level, isCore);
+            String toInsert = String.format("('%s', '%s', '%c', '%s')", moduleCode, degreeCode, level, core);
             statement.executeUpdate("INSERT INTO Approval VALUES " + toInsert);
 
             statement.close();
@@ -288,8 +296,9 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            statement.executeUpdate("DELETE FROM Modules WHERE ModuleCode = " + code);
-            statement.executeUpdate("DELETE FROM Approval WHERE ModuleCode = " + code);
+            String toDelete = String.format("'%s'", code);
+            statement.executeUpdate("DELETE FROM Approval WHERE ModuleCode=" + toDelete);
+            statement.executeUpdate("DELETE FROM Modules WHERE ModuleCode=" + toDelete);
 
             statement.close();
 

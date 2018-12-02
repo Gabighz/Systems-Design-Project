@@ -67,6 +67,7 @@ public class Main {
                 try {
                     hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
                     System.out.println("Input hashed password: " + hashedPassword);
+                    System.out.println("Database hashed password: " + password);
 
                     if (password.equals(hashedPassword)) {
                         System.out.println("Log-in successful!");
