@@ -19,6 +19,7 @@ public class Database {
             statement.execute("DROP TABLE IF EXISTS Grades;");
             statement.execute("DROP TABLE IF EXISTS Approval;");
             statement.execute("DROP TABLE IF EXISTS Modules;");
+            statement.execute("DROP TABLE IF EXISTS PartnerDepartments;");
             statement.execute("DROP TABLE IF EXISTS Degrees;");
             statement.execute("DROP TABLE IF EXISTS Departments;");
             statement.execute("DROP TABLE IF EXISTS Students;");
@@ -41,10 +42,8 @@ public class Database {
                     "RegNo INT NOT NULL, " +
                     "Email VARCHAR(255) NOT NULL, " +
                     "Tutor VARCHAR(255), " +
-                    "DegreeCode VARCHAR(6) NOT NULL" +
                     "PRIMARY KEY(RegNo), " +
-                    "FOREIGN KEY(Email) REFERENCES Accounts(Email)" +
-                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
+                    "FOREIGN KEY(Email) REFERENCES Accounts(Email) " +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Departments" +
@@ -120,8 +119,7 @@ public class Database {
                     "(" +
                     "Name  VARCHAR(255) NOT NULL, " +
                     "LevelCode  CHAR(1) NOT NULL, " +
-                    "PRIMARY KEY(DegreeCode,LevelCode), " +
-                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
+                    "PRIMARY KEY(LevelCode) " +
                     ");");
 
             /*statement.executeUpdate("CREATE ROLE administrator;");
