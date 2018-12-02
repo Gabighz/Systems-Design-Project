@@ -41,8 +41,8 @@ public class Database {
                     "RegNo VARCHAR(255) NOT NULL, " +
                     "Email VARCHAR(255) NOT NULL, " +
                     "Tutor VARCHAR(255), " +
-                    "PRIMARY KEY(RegNo,Email)" +
-                    "FOREIGN KEY(Email) REFERENCES Account(Email)" +
+                    "PRIMARY KEY(RegNo), " +
+                    "FOREIGN KEY(Email) REFERENCES Accounts(Email)" +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Departments" +
