@@ -79,8 +79,7 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("('%s', '%s', '%s', '%s')", emailAddress, hashedPassword.toString(),
-                                                                        salt.toString(), role);
+            String toInsert = String.format("('%s', '%s', '%s', '%s')", emailAddress, hashedPassword, salt, role);
 
             statement.executeUpdate("INSERT INTO Accounts VALUES " + toInsert);
 

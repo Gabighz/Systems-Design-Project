@@ -15,7 +15,7 @@ public class Main {
      * Then it checks this data against the Account table.
      *
      * Hashing should be deterministic. Therefore, if the passwords match and the same hashing is used,
-     * then their hashed veresultSetions should match.
+     * then their hashed versions should match.
      *
      * @param emailAddress       The given email address for logging in.
      * @param passwordToHash     The corresponding password for logging in.
@@ -37,23 +37,24 @@ public class Main {
             } else {
 
                 String email = null;
-                String password = null;
+                byte[] password = null;
                 byte[] salt = null;
                 String role = null;
 
                 while (resultSet.next())
                 {
                     email = resultSet.getString("Email");
-                    password = resultSet.getString("Password");
+                    password = resultSet.getBytes("Password");
                     salt = resultSet.getBytes("Salt");
                     role = resultSet.getString("Role");
                 }
+
+                System.out.println("Imported salt: " + salt);
 
                 MessageDigest md = null;
 
                 try {
                     md = MessageDigest.getInstance("SHA-512");
-                    md.update(salt);
 
                 } catch (NoSuchAlgorithmException e) {
                     System.err.println("SHA-512 is not a valid message digest algorithm");
@@ -64,6 +65,7 @@ public class Main {
 
                 try {
                     hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
+                    System.out.println("Input hashed password: " + hashedPassword);
 
                     if (password.equals(hashedPassword.toString())) {
                         System.out.println("Log-in successful!");
