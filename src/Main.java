@@ -12,7 +12,7 @@ import java.sql.*;
 public class Main {
     /**
      * Takes a user email address and password as input.
-     * Then it checks this data against the Account table.
+     * Then it checks this data against the Accounts table.
      *
      * Hashing should be deterministic. Therefore, if the passwords match and the same hashing is used,
      * then their hashed versions should match.
@@ -55,6 +55,7 @@ public class Main {
 
                 try {
                     md = MessageDigest.getInstance("SHA-512");
+                    md.update(salt);
 
                 } catch (NoSuchAlgorithmException e) {
                     System.err.println("SHA-512 is not a valid message digest algorithm");
@@ -67,7 +68,7 @@ public class Main {
                     hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
                     System.out.println("Input hashed password: " + hashedPassword);
 
-                    if (password.equals(hashedPassword.toString())) {
+                    if (password.equals(hashedPassword)) {
                         System.out.println("Log-in successful!");
                         success = true;
 
