@@ -10,6 +10,7 @@ public class Registrar {
 
   public final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
   public Boolean checkCredit = false;
+  public ResultSet results;
 
   public Registrar() {
 
@@ -44,6 +45,9 @@ public class Registrar {
 
         String updateString = String.format("(?, ?, ?, ?, ?, ?)", title, surname, forename, regNo, email, tutor, degreeCode);
         statement.executeUpdate("INSERT INTO Students VALUES " + updateString + ";");
+        
+        results = statement.executeQuery("SELECT * FROM Students;");
+        
         statement.close();
 
     } catch (SQLException ex) {
@@ -63,6 +67,7 @@ public class Registrar {
     try (Connection con = DriverManager.getConnection(DB)) {
         statement = con.createStatement();
         statement.executeUpdate("DELETE * FROM Students WHERE RegNo = ?;", regNo);
+        results = statement.executeQuery("SELECT * FROM Students;"); 
         statement.close();
 
     } catch (SQLException ex) {
@@ -71,6 +76,15 @@ public class Registrar {
     }
   }
   
+  /**
+  * Creates period of study.
+  *
+  * @param RegNo        The student's registration number
+  * @param startDate    The start date of the period of study
+  * @param endDate      The end date for the period of study
+  * @param level        The level of study
+  * @param degreeCode   The code of the degree
+  */
   public void createPeriodOfStudy(int regNo, Date startDate, Date endDate, char level, String degreeCode) {
 
       Statement statement = null;
@@ -83,12 +97,19 @@ public class Registrar {
           
           String updateString = String.format("(?, ?, ?, ?, ?, ?)", label, startDate, endDate, level, degreeCode, regNo);
           statement.executeUpdate("INSERT INTO PeriodOfStudy VALUES " + updateString + " ;");
+          
+          results = statement.executeQuery("SELECT * FROM PeriodOfStudy;");
+                  
           statement.close();
 
       } catch (SQLException ex) {
           ex.printStackTrace();
 
       }
+  }
+  
+  public ResultSet displayResults() {
+      return results;
   }
 
   
