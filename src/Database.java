@@ -63,6 +63,15 @@ public class Database {
                     "FOREIGN KEY(DepartmentCode) REFERENCES Departments(DepartmentCode)" +
                     ");");
 
+            statement.execute("CREATE TABLE IF NOT EXISTS PartnerDepartments" +
+                    "(" +
+                    "DegreeCode  VARCHAR(7) NOT NULL, " +
+                    "DepartmentCode VARCHAR(4) NOT NULL, " +
+                    "PRIMARY KEY(DegreeCode,DepartmentCode), " +
+                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
+                    "FOREIGN KEY(DepartmentCode) REFERENCES Departments(DepartmentCode)" +
+                    ");");
+
             statement.execute("CREATE TABLE IF NOT EXISTS Modules" +
                     "(" +
                     "Name  VARCHAR(255) NOT NULL, " +
@@ -111,7 +120,6 @@ public class Database {
                     "(" +
                     "Name  VARCHAR(255) NOT NULL, " +
                     "LevelCode  CHAR(1) NOT NULL, " +
-                    "DegreeCode  VARCHAR(7) NOT NULL, " +
                     "PRIMARY KEY(DegreeCode,LevelCode), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
                     ");");
