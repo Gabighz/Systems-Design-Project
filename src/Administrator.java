@@ -20,6 +20,9 @@ import java.sql.*;
 
 public class Administrator {
 
+    // Stores the connection link to the database
+    public static final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+
     /**
      * Constructs an Administrator
      */
@@ -265,7 +268,6 @@ public class Administrator {
      */
     public void removeModule(String code) {
 
-        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
         try (Connection con = DriverManager.getConnection(DB)) {

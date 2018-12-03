@@ -7,6 +7,10 @@ import java.sql.*;
  */
 
 public class Main {
+
+    // Stores the connection link to the database
+    public static final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+
     /**
      * Takes a user email address and password as input.
      * Then it checks this data against the Accounts table.
@@ -21,7 +25,6 @@ public class Main {
      */
     public static boolean logIn(String emailAddress, String inputPassword) {
 
-        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
         boolean success = false;
 
