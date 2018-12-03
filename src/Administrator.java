@@ -16,10 +16,7 @@
  */
 
 import java.sql.*;
-import java.security.SecureRandom;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.nio.charset.StandardCharsets;
+
 
 public class Administrator {
 
@@ -51,35 +48,12 @@ public class Administrator {
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-
-        MessageDigest md = null;
-
-        try {
-            md = MessageDigest.getInstance("SHA-512");
-            md.update(salt);
-
-        } catch (NoSuchAlgorithmException e) {
-            System.err.println("SHA-512 is not a valid message digest algorithm");
-
-        }
-
-        byte[] hashedPassword = null;
-
-        try {
-            hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
-
-        } catch (NullPointerException e) {
-            System.err.println("Digest is a null pointer.");
-
-        }
-        
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("('%s', '%s', '%s', '%s')", emailAddress, hashedPassword, salt, role);
+            String hashedPassword = BCrypt.hashpw(passwordToHash, BCrypt.gensalt());
+
+            String toInsert = String.format("('%s', '%s', '%s')", emailAddress, hashedPassword, role);
 
             statement.executeUpdate("INSERT INTO Accounts VALUES " + toInsert);
 

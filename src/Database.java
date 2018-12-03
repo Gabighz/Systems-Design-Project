@@ -29,7 +29,6 @@ public class Database {
                     "(" +
                     "Email VARCHAR(255) NOT NULL, " +
                     "Password VARCHAR(255) NOT NULL, " +
-                    "Salt VARCHAR(255) NOT NULL, " +
                     "Role VARCHAR(255) NOT NULL, " +
                     "PRIMARY KEY(Email)" +
                     ");");

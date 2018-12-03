@@ -1,6 +1,3 @@
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 /**
@@ -18,9 +15,11 @@ public class Main {
      * then their hashed versions should match.
      *
      * @param emailAddress       The given email address for logging in.
-     * @param passwordToHash     The corresponding password for logging in.
+     * @param inputPassword     The corresponding password for logging in.
+     *
+     * @return Whether the log-in was successful or not.
      */
-    public static boolean logIn(String emailAddress, String passwordToHash) {
+    public static boolean logIn(String emailAddress, String inputPassword) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -37,49 +36,22 @@ public class Main {
             } else {
 
                 String email = null;
-                byte[] password = null;
-                byte[] salt = null;
+                String hashedPassword = null;
                 String role = null;
 
                 while (resultSet.next())
                 {
                     email = resultSet.getString("Email");
-                    password = resultSet.getBytes("Password");
-                    salt = resultSet.getBytes("Salt");
+                    hashedPassword = resultSet.getString("Password");
                     role = resultSet.getString("Role");
                 }
 
-                System.out.println("Imported salt: " + salt);
+                if (BCrypt.checkpw(inputPassword, hashedPassword)){
+                    System.out.println("Passwords match.");
+                    success = true;
 
-                MessageDigest md = null;
-
-                try {
-                    md = MessageDigest.getInstance("SHA-512");
-                    md.update(salt);
-
-                } catch (NoSuchAlgorithmException e) {
-                    System.err.println("SHA-512 is not a valid message digest algorithm");
-
-                }
-
-                byte[] hashedPassword = null;
-
-                try {
-                    hashedPassword = md.digest(passwordToHash.getBytes(StandardCharsets.UTF_8));
-                    System.out.println("Input hashed password: " + hashedPassword);
-                    System.out.println("Database hashed password: " + password);
-
-                    if (password.equals(hashedPassword)) {
-                        System.out.println("Log-in successful!");
-                        success = true;
-
-                    } else {
-                        System.out.println("Wrong password");
-
-                    }
-
-                } catch (NullPointerException e) {
-                    System.err.println("Digest is a null pointer.");
+                } else {
+                    System.out.println("You have entered a wrong password.");
 
                 }
 
