@@ -203,21 +203,34 @@ public class Registrar {
       }
     }
     
+    /**
+     * Method that tests whether the module is suitable for the student to take
+     * 
+     * @param regNo         The students registration number
+     * @param moduleCode    The module code
+     * @return              returns true if all requirements are met
+     */
     public boolean suitableModule(int regNo, String moduleCode) {
         Statement statement = null;
         int core = 2;
+        char moduleLevel = '\u0000';
+        char studentLevel = '\u0000';
+        String moduleDegree = "";
+        String studentDegree = "";
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
             
-            //testing if module is optional
+            //getting variables for testing if module is optional, is at student's level, and is part of their degree
+            ResultSet periodOfStudy = statement.executeQuery("SELECT Max(Label) FROM PeriodOfStudy WHERE RegNo = " + regNo + ";");
             ResultSet module = statement.executeQuery("SELECT * FROM Approval WHERE ModuleCode = " + moduleCode + ";");
-            if(!module.wasNull()) {
+            if(!module.wasNull() && !periodOfStudy.wasNull()) {
                 core = Integer.parseInt(module.getString("Core"));
+                moduleLevel = module.getString("Level").charAt(0);
+                studentLevel = periodOfStudy.getString("Level").charAt(0);
+                moduleDegree = module.getString("DegreeCode");
+                studentDegree = periodOfStudy.getString("DegreeCode");
             }
-            
-            //testing if module is an option in the student's degree course and level
-            
             
             statement.close();
 
@@ -226,7 +239,8 @@ public class Registrar {
 
         }
         
-        if(core == 0)
+        //returns true if module meets all the requirements
+        if(core == 0 && (moduleLevel != '\u0000' && moduleLevel == studentLevel) && (studentDegree != "" && studentDegree == moduleDegree))
             return true;
         else 
             return false;
@@ -259,11 +273,11 @@ public class Registrar {
               }
               
               //getting number of credits student should have
-              String level =  (statement.executeQuery("SELECT Level FROM PeriodOfStudy WHERE RegNo = " + regNo + ";")).getString("Level");
+              int level =  Integer.parseInt(statement.executeQuery("SELECT Level FROM PeriodOfStudy WHERE RegNo = " + regNo + ";").getString("Level"));
               int levelCredits = 0;
-              if(level == "P") 
+              if(level == 4) 
                   levelCredits = 180;
-              else if (level == "U" )
+              else
                   levelCredits = 120;
               
               //comparing total module credits with expected
