@@ -75,51 +75,6 @@ public class Teacher {
     }
 
     /**
-     * Calculates the overall grade of a student for a period of study
-     *
-     * @param registrationNumber The registration number of the student.
-     */
-    public void periodOverall(int registrationNumber) {
-
-        Statement statement = null;
-
-        try (Connection con = DriverManager.getConnection(DB)) {
-            statement = con.createStatement();
-
-            String toExecute = String.format("SELECT * FROM PeriodOfStudy WHERE RegNo='%s';", registrationNumber);
-
-            ResultSet periodOfStudy = statement.executeQuery(toExecute);
-
-            List<String> period = new ArrayList();
-            while (periodOfStudy.next()){
-                period.add(periodOfStudy.getString("Label"));
-                period.add(periodOfStudy.getString("StartDate"));
-                period.add(periodOfStudy.getString("EndDate"));
-
-            }
-
-            toExecute = String.format("SELECT * FROM Grades WHERE RegNo='%s';", registrationNumber);
-
-            ResultSet grades = statement.executeQuery(toExecute);
-
-            List<String> gradesForPeriod = new ArrayList();
-            while (grades.next()){
-                period.add(periodOfStudy.getString("InitialGrade"));
-                period.add(periodOfStudy.getString("ResitGrade"));
-
-            }
-
-
-            statement.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        }
-
-    }
-
-    /**
      * Returns a mean grade of a student of a period of study.
      *
      * @param regNo The student registration number.
@@ -345,6 +300,46 @@ public class Teacher {
         }
 
         return false;
+    }
+
+    /**
+     * Calculates the overall degree result of a student
+     *
+     * @param registrationNumber The registration number of the student.
+     *
+     * @return A string representing the overall degree result
+     */
+    public static void degreeOverall(int registrationNumber) {
+
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+
+            String toExecute = String.format("SELECT MeanGrade FROM PeriodOfStudy WHERE RegNo='%s';", registrationNumber);
+
+            ResultSet gradesOverall = statement.executeQuery(toExecute);
+
+            List<Double> grades = new ArrayList();
+            while (gradesOverall.next()){
+                grades.add(gradesOverall.getDouble("MeanGrade"));
+
+            }
+
+            double overallResult = (grades.stream().mapToDouble(Double::doubleValue).sum()) / grades.size();
+
+            String toInsert = String.format("INSERT INTO Students (OverallGrade) VALUES ('%d')", overallResult);
+
+            // OR
+            // return degreeResult(overallResult, degreeType) and have a String return type for degreeOverall
+
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+
     }
 
     /**
