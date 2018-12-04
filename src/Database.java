@@ -75,19 +75,16 @@ public class Database {
                     "Name  VARCHAR(255) NOT NULL, " +
                     "ModuleCode  VARCHAR(8) NOT NULL, " +
                     "CalendarType VARCHAR(13), " +
-                    "DegreeCode  VARCHAR(7) NOT NULL, " +
-                    "Core BIT NOT NULL" +
                     "Credits INT(3)" +
                     "PRIMARY KEY(ModuleCode)" +
-                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Approval" +
                     "(" +
                     "ModuleCode  VARCHAR(8) NOT NULL, " +
                     "DegreeCode  VARCHAR(7) NOT NULL, " +
-                    "Level  CHAR(1), " +
-                    "Core  BOOLEAN, " +
+                    "Level CHAR(1), " +
+                    "Core BIT, " +
                     "PRIMARY KEY(ModuleCode, DegreeCode, Level), " +
                     "FOREIGN KEY(ModuleCode) REFERENCES Modules(ModuleCode), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +

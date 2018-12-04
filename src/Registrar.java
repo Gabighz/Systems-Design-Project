@@ -10,6 +10,7 @@ public class Registrar {
 
   public final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
   public Boolean checkCredit = false;
+  public String checkRegistrations;
   public ResultSet results;
 
   public Registrar() {
@@ -152,18 +153,11 @@ public class Registrar {
 
       try (Connection con = DriverManager.getConnection(DB)) {
           statement = con.createStatement();
-          
-          //testing if module is optional
-          ResultSet module = statement.executeQuery("SELECT * FROM Modules WHERE ModuleCode = " + moduleCode + ";");
-          
-          if(!module.wasNull()) {
-              int core = Integer.parseInt(module.getString("Core"));
               
-              //Only adds the module if it is not core (is optional)
-              if(core == 0) {
-                  String updateString = String.format("(?, ?)", moduleCode, regNo);
-                  statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
-              }
+          //Only adds the module if it is suitable
+          if(suitableModule(regNo, moduleCode)) {
+              String updateString = String.format("(?, ?)", moduleCode, regNo);
+              statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
           }
           
           results = statement.executeQuery("SELECT * FROM Grades;");
@@ -182,14 +176,23 @@ public class Registrar {
    * @param RegNo        The student's registration number
    * @param ModuleCode   The module code
    */
-    public void removeStudentModule(int regNo, String ModuleCode) {
+    public void removeStudentModule(int regNo, String moduleCode) {
       Statement statement = null;
 
       try (Connection con = DriverManager.getConnection(DB)) {
           statement = con.createStatement();
           
-          statement.executeUpdate("DELETE * FROM Grades WHERE  RegNo = " + regNo + " AND ModuleCode = " + ModuleCode + " ;");
+          //testing if module is optional
+          ResultSet module = statement.executeQuery("SELECT * FROM Approval WHERE ModuleCode = " + moduleCode + ";");
           
+          if(!module.wasNull()) {
+              int core = Integer.parseInt(module.getString("Core"));
+              
+              //Only deletes the module if it is not core (is optional)
+              if(core == 0)
+                  statement.executeUpdate("DELETE * FROM Grades WHERE  RegNo = " + regNo + " AND ModuleCode = " + moduleCode + " ;");
+          }
+              
           results = statement.executeQuery("SELECT * FROM Grades;");
           
           statement.close();
@@ -198,6 +201,39 @@ public class Registrar {
           ex.printStackTrace();
 
       }
+    }
+    
+    public boolean suitableModule(int regNo, String moduleCode) {
+        Statement statement = null;
+        int core = 2;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+            
+            //testing if module is optional
+            ResultSet module = statement.executeQuery("SELECT * FROM Approval WHERE ModuleCode = " + moduleCode + ";");
+            if(!module.wasNull()) {
+                core = Integer.parseInt(module.getString("Core"));
+            }
+            
+            //testing if module is an option in the student's degree course and level
+            
+            
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+        
+        if(core == 0)
+            return true;
+        else 
+            return false;
+    }
+    
+    public String getCheckRegistrations() {
+        return checkRegistrations;
     }
 
     /**
