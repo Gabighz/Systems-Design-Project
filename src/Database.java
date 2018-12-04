@@ -75,8 +75,11 @@ public class Database {
                     "Name  VARCHAR(255) NOT NULL, " +
                     "ModuleCode  VARCHAR(8) NOT NULL, " +
                     "CalendarType VARCHAR(13), " +
-                    "Credits INT(3), " +
+                    "DegreeCode  VARCHAR(7) NOT NULL, " +
+                    "Core BIT NOT NULL" +
+                    "Credits INT(3)" +
                     "PRIMARY KEY(ModuleCode)" +
+                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Approval" +
