@@ -13,22 +13,6 @@ public class Teacher {
     final static String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
 
     /**
-     * Constructs a Teacher
-     */
-    public Teacher() {
-
-    }
-
-    /**
-     * Method to convert a Teacher to a string.
-     *
-     * @return String to print out the Teacher.
-     */
-    public String toString() {
-        return "This is a Teacher.";
-    }
-
-    /**
      * Adds grade.
      *
      * @param grade The grade to add.
@@ -95,7 +79,7 @@ public class Teacher {
      *
      * @param regNo The student registration number.
      * @param label label of the period of study.
-     * @returns mean grade.
+     * @return mean grade.
      */
     public static Double meanGrade(int regNo, char label) {
 
@@ -107,6 +91,21 @@ public class Teacher {
                     regNo, label);
             ResultSet resultSet = statement.executeQuery(toExecute);
 
+            List<Double> meanGrades = new ArrayList();
+            while (resultSet.next()) {
+                Double initialGrade = resultSet.getDouble("MeanGrade");
+                if (resultSet.wasNull())
+                    meanGrades.add(null);
+                else
+                    meanGrades.add(initialGrade);
+            }
+            Double meanGrade = meanGrades.get(0);
+            if (meanGrade != null) {
+                statement.close();
+                return meanGrade;
+            }
+
+            resultSet.beforeFirst();
             List<String> list = new ArrayList();
             while (resultSet.next())
                 list.add(resultSet.getString("DegreeCode"));
@@ -153,10 +152,8 @@ public class Teacher {
             while (resultSet.next())
                 gradeModuleCodes.add(resultSet.getString("ModuleCode"));
 
-            statement.close();
-
             int count = 0;
-            Double meanGrade = 0.0;
+            meanGrade = 0.0;
             for (int i = 0; i < resitGrades.size(); i++) {
                 if (moduleCodes.contains(gradeModuleCodes.get(i))) {
                     if (resitGrades.get(i) != null) {
@@ -169,12 +166,18 @@ public class Teacher {
                     }
                 }
             }
-            if(count != 0) {
-                meanGrade /= count;
-                return meanGrade;
+
+            if(count == 0) {
+                statement.close();
+                return null;
             }
             else {
-                return null;
+                meanGrade /= count;
+                toExecute = String.format("UPDATE PeriodOfStudy SET MeanGrade='%s' WHERE RegNo='%s' AND Label='%s';",
+                        meanGrade, regNo, label);
+                statement.executeUpdate(toExecute);
+                statement.close();
+                return meanGrade;
             }
         }
         catch (SQLException ex) {
@@ -187,11 +190,35 @@ public class Teacher {
     /**
      * Checks if a student can progress to the next level of study.
      *
-     * @param meanGrade The student mean grade for a period of study.
-     * @param degreeClass The student degree.
-     * @returns true if student can progress, false if not.
+     * @param regNo The student registration number.
+     * @param label The label of the student period of study.
+     * @return true if student can progress, false if not.
      */
-    public static Boolean progress(int meanGrade, String degreeClass) {
+    public static Boolean progress(int regNo, char label) {
+        toExecute = String.format("SELECT * FROM Grades WHERE RegNo='%s';", regNo);
+        resultSet = statement.executeQuery(toExecute);
+
+        List<Double> resitGrades = new ArrayList();
+        while (resultSet.next()) {
+            Double resitGrade = resultSet.getDouble("ResitGrade");
+            if (resultSet.wasNull())
+                resitGrades.add(null);
+            else
+                resitGrades.add(resitGrade);
+        }
+
+        resultSet.beforeFirst();
+        List<Double> initialGrades = new ArrayList();
+        while (resultSet.next()) {
+            Double initialGrade = resultSet.getDouble("InitialGrade");
+            if (resultSet.wasNull())
+                initialGrades.add(null);
+            else
+                initialGrades.add(initialGrade);
+        }
+        Double meanGrade = meanGrade(regNo, label);
+
+
 
         if (degreeClass.equals("1-year MSc") || degreeClass.equals("MComp") || degreeClass.equals("MEng")) {
             if (meanGrade < 49.5)
@@ -209,17 +236,19 @@ public class Teacher {
 
     }
 
-
-
     /**
      * Returns the student degree result.
      *
      * @param meanGrade The student mean grade for a period of study.
      * @param degreeClass The student degree.
-     * @returns the student degree result.
+     * @return the student degree result.
      */
-    public static String degreeResult(int meanGrade, String degreeClass) {
-        if (degreeClass.equals("1-year MSc")) {
+    public static String degreeResult(int regNo) {
+
+
+
+
+        if (degreeType.equals("1-year MSc")) {
             if (meanGrade < 49.5)
                 return "fail";
             else if (meanGrade < 59.5)
@@ -229,7 +258,7 @@ public class Teacher {
             else
                 return "distinction";
         }
-        else if (degreeClass.equals("BSc") || degreeClass.equals("BEng")) {
+        else if (degreeType.equals("BSc") || degreeClass.equals("BEng")) {
             if (meanGrade < 39.5)
                 return "fail";
             else if (meanGrade < 44.5)
@@ -261,7 +290,7 @@ public class Teacher {
      * View student status.
      *
      * @param regNo The student registration number.
-     * @returns The student status.
+     * @return The student status.
      */
     /** public String viewStatus(int regNo) { return Student.viewStatus(regNo); } */
 
@@ -275,12 +304,12 @@ public class Teacher {
             Administrator admin = new Administrator();
 
             admin.addUser("student", "email@email", "12345");
-            statement.executeUpdate("INSERT INTO Students VALUES ('Mr', 'A', 'G', '123', 'email@email','tutor');");
+            statement.executeUpdate("INSERT INTO Students VALUES ('Mr', 'A', 'G', '123', 'email@email','tutor', NULL);");
             admin.addDepartment("Computer Science", "COM");
             admin.addDegree("Bsc Comp", "COMU03");
             admin.addModule("Systems Design and Security", "COM1001", "AUT", 20);
             admin.linkModule("COM1001", "COMU03", '1', true);
-            statement.executeUpdate("INSERT INTO PeriodOfStudy VALUES ('A', 1, 2, '1', 'COMU03', '123');");
+            statement.executeUpdate("INSERT INTO PeriodOfStudy VALUES ('A', 1, 2, '1', 'COMU03', '123', NULL);");
 
             Teacher.addGrade(78.1, 123, "COM1001", false);
             Teacher.updateGrade(67.1, 123, "COM1001", false);
