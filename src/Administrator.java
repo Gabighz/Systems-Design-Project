@@ -258,7 +258,7 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("INSERT INTO Approval VALUES ('%s', '%s', '%c', '%s')", moduleCode, degreeCode, level, core);
+            String toInsert = String.format("INSERT INTO Approval VALUES ('%s', '%s', '%c', %s)", moduleCode, degreeCode, level, core);
             statement.executeUpdate(toInsert);
 
             statement.close();
