@@ -110,7 +110,12 @@ public class Registrar {
           
           //Calculating new letter label
           ResultSet letter = statement.executeQuery("SELECT MAX(label) FROM PeriodOfStudy;");
-          char label = letter.getString("Label").charAt(0);
+          
+          char label;
+          if(letter.wasNull())
+              label = 'A';
+          else
+              label = (char) (letter.getString("Label").charAt(0) + 1);
           
           //Adding new period of study
           String updateString = String.format("(?, ?, ?, ?, ?, ?)", label, startDate, endDate, level, degreeCode, regNo);
@@ -150,12 +155,15 @@ public class Registrar {
           
           //testing if module is optional
           ResultSet module = statement.executeQuery("SELECT * FROM Modules WHERE ModuleCode = " + moduleCode + ";");
-          int core = Integer.parseInt(module.getString("Core"));
           
-          //Only adds the module if it is not core (is optional)
-          if(core == 0) {
-              String updateString = String.format("(?, ?)", moduleCode, regNo);
-              statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
+          if(!module.wasNull()) {
+              int core = Integer.parseInt(module.getString("Core"));
+              
+              //Only adds the module if it is not core (is optional)
+              if(core == 0) {
+                  String updateString = String.format("(?, ?)", moduleCode, regNo);
+                  statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
+              }
           }
           
           results = statement.executeQuery("SELECT * FROM Grades;");
@@ -206,26 +214,28 @@ public class Registrar {
           //getting modules student is taking
           ResultSet modules = statement.executeQuery("SELECT ModuleCode FROM Grades WHERE RegNo = " + regNo + ";");
           
-          //getting total credits from modules
-          int credits = 0;
-          while (modules.next()) {
-              String modCredits = modules.getString("Credits");
-              credits = credits + (Integer.parseInt(modCredits));
+          if(!modules.wasNull()) {
+              //getting total credits from modules
+              int credits = 0;
+              while (modules.next()) {
+                  String modCredits = modules.getString("Credits");
+                  credits = credits + (Integer.parseInt(modCredits));
+              }
+              
+              //getting number of credits student should have
+              String level =  (statement.executeQuery("SELECT Level FROM PeriodOfStudy WHERE RegNo = " + regNo + ";")).getString("Level");
+              int levelCredits = 0;
+              if(level == "P") 
+                  levelCredits = 180;
+              else if (level == "U" )
+                  levelCredits = 120;
+              
+              //comparing total module credits with expected
+              if (levelCredits == credits)
+                  checkCredit = true;
+              else
+                  checkCredit = false;
           }
-          
-          //getting number of credits student should have
-          String level =  (statement.executeQuery("SELECT Level FROM PeriodOfStudy WHERE RegNo = " + regNo + ";")).getString("Level");
-          int levelCredits = 0;
-          if(level == "P") 
-              levelCredits = 180;
-          else if (level == "U" )
-              levelCredits = 120;
-          
-          //comparing total module credits with expected
-          if (levelCredits == credits)
-              checkCredit = true;
-          else
-              checkCredit = false;
           
           statement.close();
 
