@@ -56,9 +56,9 @@ public class Administrator {
 
             String hashedPassword = BCrypt.hashpw(passwordToHash, BCrypt.gensalt());
 
-            String toInsert = String.format("('%s', '%s', '%s')", emailAddress, hashedPassword, role);
+            String toInsert = String.format("INSERT INTO Accounts VALUES ('%s', '%s', '%s')", emailAddress, hashedPassword, role);
 
-            statement.executeUpdate("INSERT INTO Accounts VALUES " + toInsert);
+            statement.executeUpdate(toInsert);
 
             statement.close();
 
@@ -82,8 +82,9 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toRemove = String.format("DELETE FROM Accounts WHERE Email='%s'", emailAddress);
-            statement.execute(toRemove);
+            String toRemove = String.format("'%s'", emailAddress);
+            statement.execute("DELETE FROM Accounts WHERE Email=" + toRemove);
+            statement.execute("DELETE FROM Students WHERE Email=" + toRemove);
 
             statement.close();
 
@@ -108,8 +109,8 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("('%s', '%s')", name, code);
-            statement.executeUpdate("INSERT INTO Departments VALUES " + toInsert);
+            String toInsert = String.format("INSERT INTO Departments VALUES ('%s', '%s')", name, code);
+            statement.executeUpdate(toInsert);
 
             statement.close();
 
@@ -132,8 +133,33 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            String toDelete = String.format("'%s'", code);
-            statement.executeUpdate("DELETE FROM Departments WHERE DepartmentCode=" + toDelete);
+            String toDelete = String.format("DELETE FROM Departments WHERE DepartmentCode='%s'", code);
+            statement.executeUpdate(toDelete);
+
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+
+    }
+
+    /**
+     * Links a partner department to a degree.
+     *
+     * @param degreeCode     The code of the degree to be for which it is approved.
+     * @param departmentCode The code of the partner department.
+     */
+    public void partnerDepartment(String degreeCode, String departmentCode) {
+
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+
+            String toInsert = String.format("INSERT INTO partnerDepartments VALUES ('%s', '%s')", degreeCode, departmentCode);
+            statement.executeUpdate(toInsert);
 
             statement.close();
 
@@ -160,8 +186,8 @@ public class Administrator {
 
             String leadDepartment = code.substring(0, 3);
 
-            String toInsert = String.format("('%s', '%s', '%s')", name, code, leadDepartment);
-            statement.executeUpdate("INSERT INTO Degrees VALUES " + toInsert);
+            String toInsert = String.format("INSERT INTO Degrees VALUES ('%s', '%s', '%s')", name, code, leadDepartment);
+            statement.executeUpdate(toInsert);
 
             statement.close();
 
@@ -184,8 +210,8 @@ public class Administrator {
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
-            String toDelete = String.format("'%s'", code);
-            statement.executeUpdate("DELETE FROM Degrees WHERE DegreeCode=" + toDelete);
+            String toDelete = String.format("DELETE FROM Degrees WHERE DegreeCode='%s'", code);
+            statement.executeUpdate(toDelete);
 
             statement.close();
 
@@ -215,8 +241,8 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsertModule = String.format("('%s', '%s', '%s', '%d')", name, code, calendarType, credits);
-            statement.executeUpdate("INSERT INTO Modules VALUES " + toInsertModule);
+            String toInsert = String.format("INSERT INTO Modules VALUES ('%s', '%s', '%s', '%d')", name, code, calendarType, credits);
+            statement.executeUpdate(toInsert);
 
             statement.close();
 
@@ -249,8 +275,8 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("('%s', '%s', '%c', '%s')", moduleCode, degreeCode, level, core);
-            statement.executeUpdate("INSERT INTO Approval VALUES " + toInsert);
+            String toInsert = String.format("INSERT INTO Approval VALUES ('%s', '%s', '%c', '%s')", moduleCode, degreeCode, level, core);
+            statement.executeUpdate(toInsert);
 
             statement.close();
 
