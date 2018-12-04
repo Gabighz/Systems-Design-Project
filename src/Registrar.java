@@ -148,8 +148,15 @@ public class Registrar {
       try (Connection con = DriverManager.getConnection(DB)) {
           statement = con.createStatement();
           
-          String updateString = String.format("(?, ?)", moduleCode, regNo);
-          statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
+          //testing if module is optional
+          ResultSet module = statement.executeQuery("SELECT * FROM Modules WHERE ModuleCode = " + moduleCode + ";");
+          int core = Integer.parseInt(module.getString("Core"));
+          
+          //Only adds the module if it is not core (is optional)
+          if(core == 0) {
+              String updateString = String.format("(?, ?)", moduleCode, regNo);
+              statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
+          }
           
           results = statement.executeQuery("SELECT * FROM Grades;");
           
