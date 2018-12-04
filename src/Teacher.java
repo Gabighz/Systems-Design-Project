@@ -75,6 +75,51 @@ public class Teacher {
     }
 
     /**
+     * Calculates the overall grade of a student for a period of study
+     *
+     * @param registrationNumber The registration number of the student.
+     */
+    public void periodOverall(int registrationNumber) {
+
+        Statement statement = null;
+
+        try (Connection con = DriverManager.getConnection(DB)) {
+            statement = con.createStatement();
+
+            String toExecute = String.format("SELECT * FROM PeriodOfStudy WHERE RegNo='%s';", registrationNumber);
+
+            ResultSet periodOfStudy = statement.executeQuery(toExecute);
+
+            List<String> period = new ArrayList();
+            while (periodOfStudy.next()){
+                period.add(periodOfStudy.getString("Label"));
+                period.add(periodOfStudy.getString("StartDate"));
+                period.add(periodOfStudy.getString("EndDate"));
+
+            }
+
+            toExecute = String.format("SELECT * FROM Grades WHERE RegNo='%s';", registrationNumber);
+
+            ResultSet grades = statement.executeQuery(toExecute);
+
+            List<String> gradesForPeriod = new ArrayList();
+            while (grades.next()){
+                period.add(periodOfStudy.getString("InitialGrade"));
+                period.add(periodOfStudy.getString("ResitGrade"));
+
+            }
+
+
+            statement.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+
+    }
+
+    /**
      * Returns a mean grade of a student of a period of study.
      *
      * @param regNo The student registration number.

@@ -32,7 +32,6 @@ public class Administrator {
      */
     public static void addUser(String role, String emailAddress, String passwordToHash) {
 
-        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
         try (Connection con = DriverManager.getConnection(DB)) {
