@@ -4,13 +4,26 @@
  * and open the template in the editor.
  */
 package UniversityDBMS;
-
+import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.JOptionPane.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author thughes
  */
-public class StudentInformation extends javax.swing.JFrame {
 
+public class StudentInformation extends javax.swing.JFrame {
+    /*
+    public ArrayList<Student> studentStatus(){
+        ArrayList<Student> studentStatus = new ArrayList<>();
+            try {
+             
+            
+            }
+        
+    }
+    */
     /**
      * Creates new form StudentInformation
      */
@@ -18,7 +31,7 @@ public class StudentInformation extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,6 +46,7 @@ public class StudentInformation extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnShow = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,14 +61,29 @@ public class StudentInformation extends javax.swing.JFrame {
                 {null, null, null}
             },
             new String [] {
-                "Module", "Department", "Grade"
+                "Period of Study", "Student Level", "Outcome"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Logout");
 
         jButton2.setText("Back");
+
+        btnShow.setText("Show");
+        btnShow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -66,6 +95,8 @@ public class StudentInformation extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnShow)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
@@ -78,7 +109,8 @@ public class StudentInformation extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(btnShow))
                 .addGap(0, 10, Short.MAX_VALUE))
         );
 
@@ -102,10 +134,15 @@ public class StudentInformation extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
+        // TODO add your handling code here:
+        FillTable();
+    }//GEN-LAST:event_btnShowActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) {            
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -136,8 +173,19 @@ public class StudentInformation extends javax.swing.JFrame {
             }
         });
     }
-
+    public void FillTable(){
+       ArrayList<Student> list = studentStatus();
+       DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+       Object[] row = new Object[3];
+       for (int i=0;i<list.size();i++){
+           row[0]=list.get(i).getPeriodOfStudy();
+           row[1]=list.get(i).getStudentLevel();
+           row[2]=list.get(i).getOutcome();
+       } 
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnShow;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
