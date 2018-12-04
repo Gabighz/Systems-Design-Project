@@ -329,6 +329,7 @@ public class Teacher {
             double overallResult = (grades.stream().mapToDouble(Double::doubleValue).sum()) / grades.size();
 
             String toInsert = String.format("INSERT INTO Students (OverallGrade) VALUES ('%.2f')", overallResult);
+            statement.executeUpdate(toInsert);
 
             // OR
             // return degreeResult(overallResult, degreeType) and have a String return type for degreeOverall
