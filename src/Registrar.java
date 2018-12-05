@@ -8,10 +8,10 @@ import java.sql.*;
 
 public class Registrar {
 
-  public final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
-  public Boolean checkCredit = false;
-  public String checkRegistrations;
-  public ResultSet results;
+  public static final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+  public static Boolean checkCredit = false;
+  public static String checkRegistrations;
+  public static ResultSet results;
 
   public Registrar() {
 
@@ -24,7 +24,7 @@ public class Registrar {
    * @param forename            The student's forename.
    * @param surname             The student's surname.
    */
-  public void addStudent(String title, String forename, String surname, String tutor, String degreeCode) {
+  public static void addStudent(String title, String forename, String surname, String tutor, String degreeCode) {
     Statement statement = null;
     String startEmail = forename.toUpperCase().charAt(0) + surname.toUpperCase().charAt(0) + surname.substring(1);
 
@@ -75,7 +75,7 @@ public class Registrar {
    *
    * @param RegNo     The student's registration number
    */
-  public void removeStudent(int regNo) {
+  public static void removeStudent(int regNo) {
     Statement statement = null;
 
     try (Connection con = DriverManager.getConnection(DB)) {
@@ -102,7 +102,7 @@ public class Registrar {
   * @param level        The level of study
   * @param degreeCode   The code of the degree
   */
-  public void createPeriodOfStudy(int regNo, Date startDate, Date endDate, char level, String degreeCode) {
+  public static void createPeriodOfStudy(int regNo, Date startDate, Date endDate, char level, String degreeCode) {
 
       Statement statement = null;
 
@@ -138,7 +138,7 @@ public class Registrar {
    * 
    * @return results    The sql resultSet that contains the table that has been changed
    */
-  public ResultSet displayResults() {
+  public static ResultSet displayResults() {
       return results;
   }
   
@@ -148,7 +148,7 @@ public class Registrar {
    * @param RegNo        The student's registration number
    * @param ModuleCode   The module code
    */
-  public void addStudentModule(int regNo, String moduleCode) {
+  public static void addStudentModule(int regNo, String moduleCode) {
       Statement statement = null;
 
       try (Connection con = DriverManager.getConnection(DB)) {
@@ -176,7 +176,7 @@ public class Registrar {
    * @param RegNo        The student's registration number
    * @param ModuleCode   The module code
    */
-    public void removeStudentModule(int regNo, String moduleCode) {
+    public static void removeStudentModule(int regNo, String moduleCode) {
       Statement statement = null;
 
       try (Connection con = DriverManager.getConnection(DB)) {
@@ -210,7 +210,7 @@ public class Registrar {
      * @param moduleCode    The module code
      * @return              returns true if all requirements are met
      */
-    public boolean suitableModule(int regNo, String moduleCode) {
+    public static boolean suitableModule(int regNo, String moduleCode) {
         Statement statement = null;
         int core = 2;
         char moduleLevel = '\u0000';
@@ -246,7 +246,7 @@ public class Registrar {
             return false;
     }
     
-    public String getCheckRegistrations() {
+    public static String getCheckRegistrations() {
         return checkRegistrations;
     }
 
@@ -255,7 +255,7 @@ public class Registrar {
      *
      * @param RegNo        The student's registration number
      */
-    public void setCheckCredit(int regNo) {
+    public static void setCheckCredit(int regNo) {
       Statement statement = null;
 
       try (Connection con = DriverManager.getConnection(DB)) {
@@ -301,7 +301,7 @@ public class Registrar {
      * 
      * @return checkCredit   boolean that shows whether credits are as expected
      */
-    public boolean getCheckCredit() {
+    public static boolean getCheckCredit() {
       return checkCredit;
     }
 
