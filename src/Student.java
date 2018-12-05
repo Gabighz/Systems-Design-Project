@@ -34,6 +34,8 @@ public class Student {
           while (periodOfStudy.next()) {
               List<Object> gradeArray = new ArrayList<Object>();
               String level = periodOfStudy.getString("Level");
+              char label = periodOfStudy.getString("Label").charAt(0);
+              Double meanGrade = Teacher.meanGrade(regNo, label);
               
               student.add(level);
               
@@ -52,6 +54,7 @@ public class Student {
               }
               
               student.add(gradeArray);
+              student.add(meanGrade);
               
           }
           statement.close();
@@ -66,10 +69,12 @@ public class Student {
   /**
    * Returns the student's data so it can be displayed in the user interface
    * 
-   * @return student    An arrayList in the form: level of study, arraylist of modules and grades for each period of study
+   * @return student    An arrayList containing information for each level of study in the form: 
+   *                    level of study, arraylist of modules and grades, mean grade for period of study
    */
   public List<Object> getViewStudent() {
       return student;
   }
   
+
 }
