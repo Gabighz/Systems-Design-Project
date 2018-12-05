@@ -71,11 +71,4 @@ public class Main {
 
     }
 
-    public static void main(String[] args){
-        Administrator admin = new Administrator();
-        admin.removeUser("gghiuzan");
-        admin.addUser("student", "gghiuzan", "1234");
-        logIn("gghiuzan", "1234");
-
-    }
 }

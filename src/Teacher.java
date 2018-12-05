@@ -388,38 +388,4 @@ public class Teacher {
         return null;
     }
 
-    public static void main(String[] args) {
-        Statement statement;
-
-        try (Connection con = DriverManager.getConnection(DB)) {
-            statement = con.createStatement();
-
-            Administrator.addUser("student", "email@email", "12345");
-            statement.executeUpdate("INSERT INTO Students VALUES ('Mr', 'A', 'G', '123', 'email@email','tutor', NULL);");
-            Administrator.addDepartment("Computer Science", "COM");
-            Administrator.addDegree("BSc", "Bsc Comp", "COMU03");
-            Administrator.addModule("Systems Design and Security", "COM1001", "AUT", 20);
-            Administrator.linkModule("COM1001", "COMU03", '1', true);
-            statement.executeUpdate("INSERT INTO PeriodOfStudy VALUES ('A', 1, 2, '1', 'COMU03', '123', NULL);");
-
-            Teacher.addGrade(78.1, 123, "COM1001", false);
-            Teacher.updateGrade(67.1, 123, "COM1001", false);
-            System.out.println(Teacher.meanGrade(123, 'A'));
-            System.out.println(Teacher.progress(123, 'A'));
-
-            statement.executeUpdate("DELETE FROM PeriodOfStudy WHERE RegNo=123;");
-            statement.executeUpdate("DELETE FROM Grades WHERE RegNo=123 AND ModuleCode='COM1001';");
-            Administrator.removeModule("COM1001");
-            Administrator.removeDegree("COMU03");
-            Administrator.removeDepartment("COM");
-            statement.executeUpdate("DELETE FROM Students WHERE Email='email@email';");
-            Administrator.removeUser("email@email");
-
-            statement.close();
-            System.out.println("Statement closed.");
-        }
-        catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
 }
