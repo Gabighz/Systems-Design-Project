@@ -1,5 +1,5 @@
 /**
-* Class for a registrar object
+* This class contains functions for registrar tasks.
 *
 * @author Amy Smith
 */

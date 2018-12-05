@@ -1,12 +1,12 @@
 import java.sql.*;
 
 /**
- * This class handles log-in and *to be completed*
+ * This class handles the log-in of a user.
  *
  * @author Gabriel Ghiuzan
  */
 
-public class Main {
+public class LogIn {
 
     // Stores the connection link to the database
     public static final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
@@ -71,11 +71,4 @@ public class Main {
 
     }
 
-    public static void main(String[] args){
-        Administrator admin = new Administrator();
-        admin.removeUser("gghiuzan");
-        admin.addUser("student", "gghiuzan", "1234");
-        logIn("gghiuzan", "1234");
-
-    }
 }
