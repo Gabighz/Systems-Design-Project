@@ -24,31 +24,14 @@ public class Administrator {
     public static final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
 
     /**
-     * Constructs an Administrator
-     */
-    public Administrator() {
-
-    }
-
-    /**
-     * Method to convert an Administrator to a string.
-     *
-     * @return String to print out the Administrator.
-     */
-    public String toString() {
-        return "This is an Administrator.";
-    }
-
-    /**
      * Adds a new user account.
      *
      * @param role               The role of the owner of the account.
      * @param emailAddress       The email address of the new user account.
      * @param passwordToHash     The unhashed password of the new user account.
      */
-    public void addUser(String role, String emailAddress, String passwordToHash) {
+    public static void addUser(String role, String emailAddress, String passwordToHash) {
 
-        String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
 
         try (Connection con = DriverManager.getConnection(DB)) {
@@ -74,7 +57,7 @@ public class Administrator {
      *
      * @param emailAddress The email address of the account to be deleted.
      */
-    public void removeUser(String emailAddress) {
+    public static void removeUser(String emailAddress) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -101,7 +84,7 @@ public class Administrator {
      * @param name The name of the department to be added.
      * @param code The code of the department to be added.
      */
-    public void addDepartment(String name, String code) {
+    public static void addDepartment(String name, String code) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -126,7 +109,7 @@ public class Administrator {
      *
      * @param code The code of the department to be deleted.
      */
-    public void removeDepartment(String code) {
+    public static void removeDepartment(String code) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -151,14 +134,14 @@ public class Administrator {
      * @param degreeCode     The code of the degree to be for which it is approved.
      * @param departmentCode The code of the partner department.
      */
-    public void partnerDepartment(String degreeCode, String departmentCode) {
+    public static void partnerDepartment(String degreeCode, String departmentCode) {
 
         Statement statement = null;
 
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("INSERT INTO partnerDepartments VALUES ('%s', '%s')", degreeCode, departmentCode);
+            String toInsert = String.format("INSERT INTO PartnerDepartments VALUES ('%s', '%s')", degreeCode, departmentCode);
             statement.executeUpdate(toInsert);
 
             statement.close();
@@ -176,7 +159,7 @@ public class Administrator {
      * @param name The name of the degree to be added.
      * @param code The code of the degree to be added.
      */
-    public void addDegree(String name, String code) {
+    public static void addDegree(String degreeType, String name, String code) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -186,7 +169,7 @@ public class Administrator {
 
             String leadDepartment = code.substring(0, 3);
 
-            String toInsert = String.format("INSERT INTO Degrees VALUES ('%s', '%s', '%s')", name, code, leadDepartment);
+            String toInsert = String.format("INSERT INTO Degrees VALUES ('%s', '%s', '%s', '%s')", name, degreeType, code, leadDepartment);
             statement.executeUpdate(toInsert);
 
             statement.close();
@@ -203,7 +186,7 @@ public class Administrator {
      *
      * @param code The code of the degree to be deleted.
      */
-    public void removeDegree(String code) {
+    public static void removeDegree(String code) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -233,7 +216,7 @@ public class Administrator {
      *                     20 credits in level 1-3, 15 in level 4,
          *                 40 credits for undergraduate dissertations, 60 credits for masters' dissertations
      */
-    public void addModule(String name, String code, String calendarType, int credits) {
+    public static void addModule(String name, String code, String calendarType, int credits) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -261,7 +244,7 @@ public class Administrator {
      * @param level      The level of study for which it is approved.
      * @param isCore     Whether the module is core or not.
      */
-    public void linkModule(String moduleCode, String degreeCode, int level, boolean isCore) {
+    public static void linkModule(String moduleCode, String degreeCode, int level, boolean isCore) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -275,7 +258,7 @@ public class Administrator {
         try (Connection con = DriverManager.getConnection(DB)) {
             statement = con.createStatement();
 
-            String toInsert = String.format("INSERT INTO Approval VALUES ('%s', '%s', '%c', '%s')", moduleCode, degreeCode, level, core);
+            String toInsert = String.format("INSERT INTO Approval VALUES ('%s', '%s', '%c', %s)", moduleCode, degreeCode, level, core);
             statement.executeUpdate(toInsert);
 
             statement.close();
@@ -292,7 +275,7 @@ public class Administrator {
      *
      * @param code The code of the module to be deleted.
      */
-    public void removeModule(String code) {
+    public static void removeModule(String code) {
 
         Statement statement = null;
 
