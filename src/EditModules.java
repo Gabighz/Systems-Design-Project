@@ -336,7 +336,7 @@ public class EditModules extends javax.swing.JFrame {
         // TODO add your handling code here:
         String deleteModule = txtRemoveModuleName.getText();
         if(deleteModule == null){
-            JOptionPane.showMessagePane(null, "Please ensure all fields are filled in");
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
         }else{
             int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this module?","Delete",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (dialogResult == JOptionPane.YES_OPTION){

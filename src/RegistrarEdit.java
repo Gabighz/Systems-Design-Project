@@ -425,7 +425,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
         String moduleCode = txtModuleCode.getText();
         //add code to insert module into table for given registration number
         if (txtRegNoModule.getText() == null || moduleCode == null){
-            JOPtionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
         }else{
             JOptionPane.showMessageDialog(null, "Module added");
             registrar.addStudentModule(regNoModule, moduleCode);
@@ -449,7 +449,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
         // TODO add your handling code here:
         int regNo = Integer.parseInt(txtRegNoRemove.getText());
         if(txtRegNoRemove.getText() == null){
-            JOptinoPane.showMessageDialog(null, "Please ensure all fields are filled in");
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
         }else{
             registrar.removeStudent(regNo);
             JOptionPane.showMessageDialog(null, "Student deleted");

@@ -291,7 +291,7 @@ public class EditAccounts extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
         }else {
             admin.addUser(role, email, password);
-            JOptionPane.showMessageDialog(null, "Account added")
+            JOptionPane.showMessageDialog(null, "Account added");
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
