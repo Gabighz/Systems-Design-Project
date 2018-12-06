@@ -1,5 +1,4 @@
 
-
 /**
  * This class constructs an Administrator object.
  *
@@ -246,7 +245,7 @@ public class Administrator {
      * @param level      The level of study for which it is approved.
      * @param isCore     Whether the module is core or not.
      */
-    public static void linkModule(String moduleCode, String degreeCode, int level, boolean isCore) {
+    public static void linkModule(String moduleCode, String degreeCode, char level, boolean isCore) {
 
         String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
         Statement statement = null;
@@ -293,11 +292,6 @@ public class Administrator {
             ex.printStackTrace();
 
         }
-
-    }
-
-    public static void main(String[] args){
-        addUser("Admin", "gghiuzan", "1234");
 
     }
 
