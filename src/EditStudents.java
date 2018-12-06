@@ -21,10 +21,10 @@ public class EditStudents extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
     }
-    
+
     Teacher teacher = new Teacher();
-    
-    
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -349,14 +349,18 @@ public class EditStudents extends javax.swing.JFrame {
         }else{
             resit = false;
         }
-        
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to update grade?","Update",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (dialogResult == JOptionPane.YES_OPTION){
-            teacher.addGrade(grade,regNo,moduleCode,resit);
-            ClearEditGrades();
-        }
-        else {
-            ClearEditGrades();
+        if (txtGrade.getText() == null || txtRegNo.getText() == null || moduleCode == null){
+            JOptionPane.showMessageDialog(null, "Please ensure all field are filled in");
+        }else{
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to update grade?","Update",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (dialogResult == JOptionPane.YES_OPTION){
+                teacher.addGrade(grade,regNo,moduleCode,resit);
+                JOptionPane.showMessageDialog(null, "Grade Updated");
+                ClearEditGrades();
+            }
+            else {
+                ClearEditGrades();
+            }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -366,10 +370,13 @@ public class EditStudents extends javax.swing.JFrame {
         char label = txtLabel.getText().charAt(0);
         String degreeClass = txtDegreeClass.getText();
         double mean = teacher.meanGrade(regNoMean,label);
-       
-        txtAverageGrade.setText(String.valueOf(mean));
-        txtProgress.setText(String.valueOf(teacher.progress(regNoMean, label)));
-        txtDegreeResult.setText(teacher.degreeResult(mean, degreeClass));
+        if (txtRegNoMean.getText() == null || txtLabel.getText() == null || degreeClass == null){
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+        }else{
+            txtAverageGrade.setText(String.valueOf(mean));
+            txtProgress.setText(String.valueOf(teacher.progress(regNoMean, label)));
+            txtDegreeResult.setText(teacher.degreeResult(mean, degreeClass));
+        }
 
     }//GEN-LAST:event_btnCalculateActionPerformed
 
@@ -383,10 +390,10 @@ public class EditStudents extends javax.swing.JFrame {
         txtModuleName.setText(null);
         txtGrade.setText(null);
     }
-    
-    
-    
-    
+
+
+
+
     /**
      * @param args the command line arguments
      */
@@ -394,7 +401,7 @@ public class EditStudents extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

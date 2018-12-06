@@ -9,6 +9,8 @@
  *
  * @author thughes
  */
+import javax.swing.JOptionPane;
+
 public class RegistrarEdit extends javax.swing.JFrame {
 
     /**
@@ -20,9 +22,9 @@ public class RegistrarEdit extends javax.swing.JFrame {
     }
 
     Registrar registrar = new Registrar();
-    
-    
-    
+
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -401,10 +403,15 @@ public class RegistrarEdit extends javax.swing.JFrame {
         String degreeCode = txtDegreeCode.getText();
         String tutor = txtTutor.getText();
         //add function to add to table
-        registrar.addStudent(title,forename,surname,degreeCode,tutor);
-        
-        
-        
+        if (forename == null || surname == null || degreeCode == null || tutor == null){
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+        }else{
+            JOptionPane.showMessageDialog(null, "Student added");
+            registrar.addStudent(title,forename,surname,degreeCode,tutor);
+        }
+
+
+
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -417,8 +424,12 @@ public class RegistrarEdit extends javax.swing.JFrame {
         int regNoModule = Integer.parseInt(txtRegNoModule.getText());
         String moduleCode = txtModuleCode.getText();
         //add code to insert module into table for given registration number
-        registrar.addStudentModule(regNoModule, moduleCode);
-        
+        if (txtRegNoModule.getText() == null || moduleCode == null){
+            JOPtionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+        }else{
+            JOptionPane.showMessageDialog(null, "Module added");
+            registrar.addStudentModule(regNoModule, moduleCode);
+        }
     }//GEN-LAST:event_btnAddModuleActionPerformed
 
     private void btnDeleteModuleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteModuleActionPerformed
@@ -426,14 +437,23 @@ public class RegistrarEdit extends javax.swing.JFrame {
         int regNoRemove= Integer.parseInt(txtRegNoRemoveModule.getText());
         String moduleCodeRemove = txtModuleCodeRemove.getText();
         //Add code to delete
-        registrar.removeStudentModule(regNoRemove, moduleCodeRemove);
-        
+        if(txtRegNoRemoveModule.getText() == null || moduleCodeRemove == null){
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+        }else{
+            JOptionPane.showMessageDialog(null, "Module deleted");
+            registrar.removeStudentModule(regNoRemove, moduleCodeRemove);
+        }
     }//GEN-LAST:event_btnDeleteModuleActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         int regNo = Integer.parseInt(txtRegNoRemove.getText());
-        registrar.removeStudent(regNo);
+        if(txtRegNoRemove.getText() == null){
+            JOptinoPane.showMessageDialog(null, "Please ensure all fields are filled in");
+        }else{
+            registrar.removeStudent(regNo);
+            JOptionPane.showMessageDialog(null, "Student deleted");
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void ClearFields(){
@@ -449,7 +469,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

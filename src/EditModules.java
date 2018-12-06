@@ -324,24 +324,33 @@ public class EditModules extends javax.swing.JFrame {
       String calendarType = txtCalendarType.getText();
       int credits = Integer.parseInt(txtCredits.getText());
       //Add code to insert to database
-      admin.addModule(moduleName, code, calendarType, credits);
+      if (moduleName == null || code == null || calendarType == null){
+          JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+      }else{
+        admin.addModule(moduleName, code, calendarType, credits);
+        JOptionPane.showMessageDialog(null, "Module Added");
+      }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         String deleteModule = txtRemoveModuleName.getText();
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this module?","Delete",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (dialogResult == JOptionPane.YES_OPTION){
-            //Delete Function
-            admin.removeModule(deleteModule);
-            JOptionPane.showMessageDialog(null, "Module deleted");
-            txtRemoveModuleName.setText(null);     
+        if(deleteModule == null){
+            JOptionPane.showMessagePane(null, "Please ensure all fields are filled in");
+        }else{
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this module?","Delete",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (dialogResult == JOptionPane.YES_OPTION){
+                //Delete Function
+                admin.removeModule(deleteModule);
+                JOptionPane.showMessageDialog(null, "Module deleted");
+                txtRemoveModuleName.setText(null);
+            }
+            else {
+                txtRemoveModuleName.setText(null);
+            }
+
         }
-        else {
-           txtRemoveModuleName.setText(null);     
-        }
-            
- 
+
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -369,16 +378,16 @@ public class EditModules extends javax.swing.JFrame {
             core = true;
         else
             core = false;
-        
-        if (moduleCode == null || degreeCode == null){  
+
+        if (moduleCode == null || degreeCode == null){
             JOptionPane.showMessageDialog(null,"Please ensure all fields are filled in");
-        
-        }else{             
+        }else{
             admin.linkModule(moduleCode, degreeCode, level, core);
+            JOptionPane.showMessageDialog(null, "Modules linked");
             txtModuleCode.setText(null);
             txtDegreeCode.setText(null);
             }
-        
+
     }//GEN-LAST:event_btnLinkActionPerformed
 
     /**
@@ -388,7 +397,7 @@ public class EditModules extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

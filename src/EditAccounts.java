@@ -20,7 +20,7 @@ public class EditAccounts extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     Administrator admin = new Administrator();
-   
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -249,7 +249,7 @@ public class EditAccounts extends javax.swing.JFrame {
         txtEmailAdd.setText(null);
         txtPasswordAdd.setText(null);
     }
-    
+
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
          this.dispose();
@@ -266,18 +266,19 @@ public class EditAccounts extends javax.swing.JFrame {
 
     private void txtDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDeleteActionPerformed
         // TODO add your handling code here:
-        
+
         String email = txtEmail.getText();
         if (email == null){
-            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");                
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
         }else{
             int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this account?","Delete",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (dialogResult == JOptionPane.YES_OPTION){
                 admin.removeUser(email);
+                JOptionPane.showMessageDialog(null, "Account deleted");
                 ClearFieldsAdd();
             }else{
               ClearFieldsAdd();
-            }      
+            }
         }
     }//GEN-LAST:event_txtDeleteActionPerformed
 
@@ -287,10 +288,11 @@ public class EditAccounts extends javax.swing.JFrame {
         String email = txtEmailAdd.getText();
         String password = txtPasswordAdd.getText();
         if (email == null || password == null){
-            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in"); 
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
         }else {
             admin.addUser(role, email, password);
-        }     
+            JOptionPane.showMessageDialog(null, "Account added")
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -305,7 +307,7 @@ public class EditAccounts extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
