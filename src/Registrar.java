@@ -1,5 +1,7 @@
+
+
 /**
-* This class contains functions for registrar tasks.
+* Class for a registrar object
 *
 * @author Amy Smith
 */
@@ -8,10 +10,9 @@ import java.sql.*;
 
 public class Registrar {
 
-  public static final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
-  public static Boolean checkCredit = false;
-  public static String checkRegistrations;
-  public static ResultSet results;
+  public final String DB = "jdbc:mysql://stusql.dcs.shef.ac.uk/team030?user=team030&password=71142c41";
+  public Boolean checkCredit = false;
+  public ResultSet results;
 
   public Registrar() {
 
@@ -24,7 +25,7 @@ public class Registrar {
    * @param forename            The student's forename.
    * @param surname             The student's surname.
    */
-  public static void addStudent(String title, String forename, String surname, String tutor, String degreeCode) {
+  public void addStudent(String title, String forename, String surname, String tutor, String degreeCode) {
     Statement statement = null;
     String startEmail = forename.toUpperCase().charAt(0) + surname.toUpperCase().charAt(0) + surname.substring(1);
 
@@ -75,7 +76,7 @@ public class Registrar {
    *
    * @param RegNo     The student's registration number
    */
-  public static void removeStudent(int regNo) {
+  public void removeStudent(int regNo) {
     Statement statement = null;
 
     try (Connection con = DriverManager.getConnection(DB)) {
@@ -102,7 +103,7 @@ public class Registrar {
   * @param level        The level of study
   * @param degreeCode   The code of the degree
   */
-  public static void createPeriodOfStudy(int regNo, Date startDate, Date endDate, char level, String degreeCode) {
+  public void createPeriodOfStudy(int regNo, Date startDate, Date endDate, char level, String degreeCode) {
 
       Statement statement = null;
 
@@ -111,12 +112,7 @@ public class Registrar {
           
           //Calculating new letter label
           ResultSet letter = statement.executeQuery("SELECT MAX(label) FROM PeriodOfStudy;");
-          
-          char label;
-          if(letter.wasNull())
-              label = 'A';
-          else
-              label = (char) (letter.getString("Label").charAt(0) + 1);
+          char label = letter.getString("Label").charAt(0);
           
           //Adding new period of study
           String updateString = String.format("(?, ?, ?, ?, ?, ?)", label, startDate, endDate, level, degreeCode, regNo);
@@ -138,7 +134,7 @@ public class Registrar {
    * 
    * @return results    The sql resultSet that contains the table that has been changed
    */
-  public static ResultSet displayResults() {
+  public ResultSet displayResults() {
       return results;
   }
   
@@ -148,17 +144,14 @@ public class Registrar {
    * @param RegNo        The student's registration number
    * @param ModuleCode   The module code
    */
-  public static void addStudentModule(int regNo, String moduleCode) {
+  public void addStudentModule(int regNo, String moduleCode) {
       Statement statement = null;
 
       try (Connection con = DriverManager.getConnection(DB)) {
           statement = con.createStatement();
-              
-          //Only adds the module if it is suitable
-          if(suitableModule(regNo, moduleCode)) {
-              String updateString = String.format("(?, ?)", moduleCode, regNo);
-              statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
-          }
+          
+          String updateString = String.format("(?, ?)", moduleCode, regNo);
+          statement.executeUpdate("INSERT INTO Grades (ModuleCode, RegNo) VALUES " + updateString + " ;");
           
           results = statement.executeQuery("SELECT * FROM Grades;");
           
@@ -176,23 +169,14 @@ public class Registrar {
    * @param RegNo        The student's registration number
    * @param ModuleCode   The module code
    */
-    public static void removeStudentModule(int regNo, String moduleCode) {
+    public void removeStudentModule(int regNo, String ModuleCode) {
       Statement statement = null;
 
       try (Connection con = DriverManager.getConnection(DB)) {
           statement = con.createStatement();
           
-          //testing if module is optional
-          ResultSet module = statement.executeQuery("SELECT * FROM Approval WHERE ModuleCode = " + moduleCode + ";");
+          statement.executeUpdate("DELETE * FROM Grades WHERE  RegNo = " + regNo + " AND ModuleCode = " + ModuleCode + " ;");
           
-          if(!module.wasNull()) {
-              int core = Integer.parseInt(module.getString("Core"));
-              
-              //Only deletes the module if it is not core (is optional)
-              if(core == 0)
-                  statement.executeUpdate("DELETE * FROM Grades WHERE  RegNo = " + regNo + " AND ModuleCode = " + moduleCode + " ;");
-          }
-              
           results = statement.executeQuery("SELECT * FROM Grades;");
           
           statement.close();
@@ -202,60 +186,13 @@ public class Registrar {
 
       }
     }
-    
-    /**
-     * Method that tests whether the module is suitable for the student to take
-     * 
-     * @param regNo         The students registration number
-     * @param moduleCode    The module code
-     * @return              returns true if all requirements are met
-     */
-    public static boolean suitableModule(int regNo, String moduleCode) {
-        Statement statement = null;
-        int core = 2;
-        char moduleLevel = '\u0000';
-        char studentLevel = '\u0000';
-        String moduleDegree = "";
-        String studentDegree = "";
-
-        try (Connection con = DriverManager.getConnection(DB)) {
-            statement = con.createStatement();
-            
-            //getting variables for testing if module is optional, is at student's level, and is part of their degree
-            ResultSet periodOfStudy = statement.executeQuery("SELECT Max(Label) FROM PeriodOfStudy WHERE RegNo = " + regNo + ";");
-            ResultSet module = statement.executeQuery("SELECT * FROM Approval WHERE ModuleCode = " + moduleCode + ";");
-            if(!module.wasNull() && !periodOfStudy.wasNull()) {
-                core = Integer.parseInt(module.getString("Core"));
-                moduleLevel = module.getString("Level").charAt(0);
-                studentLevel = periodOfStudy.getString("Level").charAt(0);
-                moduleDegree = module.getString("DegreeCode");
-                studentDegree = periodOfStudy.getString("DegreeCode");
-            }
-            
-            statement.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        }
-        
-        //returns true if module meets all the requirements
-        if(core == 0 && (moduleLevel != '\u0000' && moduleLevel == studentLevel) && (studentDegree != "" && studentDegree == moduleDegree))
-            return true;
-        else 
-            return false;
-    }
-    
-    public static String getCheckRegistrations() {
-        return checkRegistrations;
-    }
 
     /**
      * Checks if a student's credits add up to the correct number.
      *
      * @param RegNo        The student's registration number
      */
-    public static void setCheckCredit(int regNo) {
+    public void setCheckCredit(int regNo) {
       Statement statement = null;
 
       try (Connection con = DriverManager.getConnection(DB)) {
@@ -264,28 +201,26 @@ public class Registrar {
           //getting modules student is taking
           ResultSet modules = statement.executeQuery("SELECT ModuleCode FROM Grades WHERE RegNo = " + regNo + ";");
           
-          if(!modules.wasNull()) {
-              //getting total credits from modules
-              int credits = 0;
-              while (modules.next()) {
-                  String modCredits = modules.getString("Credits");
-                  credits = credits + (Integer.parseInt(modCredits));
-              }
-              
-              //getting number of credits student should have
-              int level =  Integer.parseInt(statement.executeQuery("SELECT Level FROM PeriodOfStudy WHERE RegNo = " + regNo + ";").getString("Level"));
-              int levelCredits = 0;
-              if(level == 4) 
-                  levelCredits = 180;
-              else
-                  levelCredits = 120;
-              
-              //comparing total module credits with expected
-              if (levelCredits == credits)
-                  checkCredit = true;
-              else
-                  checkCredit = false;
+          //getting total credits from modules
+          int credits = 0;
+          while (modules.next()) {
+              String modCredits = modules.getString("Credits");
+              credits = credits + (Integer.parseInt(modCredits));
           }
+          
+          //getting number of credits student should have
+          String level =  (statement.executeQuery("SELECT Level FROM PeriodOfStudy WHERE RegNo = " + regNo + ";")).getString("Level");
+          int levelCredits = 0;
+          if(level == "P") 
+              levelCredits = 180;
+          else if (level == "U" )
+              levelCredits = 120;
+          
+          //comparing total module credits with expected
+          if (levelCredits == credits)
+              checkCredit = true;
+          else
+              checkCredit = false;
           
           statement.close();
 
@@ -301,7 +236,7 @@ public class Registrar {
      * 
      * @return checkCredit   boolean that shows whether credits are as expected
      */
-    public static boolean getCheckCredit() {
+    public boolean getCheckCredit() {
       return checkCredit;
     }
 

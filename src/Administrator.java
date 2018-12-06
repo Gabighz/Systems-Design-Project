@@ -1,3 +1,5 @@
+
+
 /**
  * This class constructs an Administrator object.
  *
@@ -291,6 +293,11 @@ public class Administrator {
             ex.printStackTrace();
 
         }
+
+    }
+
+    public static void main(String[] args){
+        addUser("Admin", "gghiuzan", "1234");
 
     }
 

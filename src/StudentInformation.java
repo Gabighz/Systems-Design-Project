@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UniversityDBMS;
+
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane.*;
@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class StudentInformation extends javax.swing.JFrame {
+    
     /*
     public ArrayList<Student> studentStatus(){
         ArrayList<Student> studentStatus = new ArrayList<>();
@@ -136,7 +137,7 @@ public class StudentInformation extends javax.swing.JFrame {
 
     private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
         // TODO add your handling code here:
-        FillTable();
+       // FillTable();
     }//GEN-LAST:event_btnShowActionPerformed
 
     /**
@@ -173,6 +174,7 @@ public class StudentInformation extends javax.swing.JFrame {
             }
         });
     }
+    /*
     public void FillTable(){
        ArrayList<Student> list = studentStatus();
        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
@@ -183,6 +185,7 @@ public class StudentInformation extends javax.swing.JFrame {
            row[2]=list.get(i).getOutcome();
        } 
     }
+    */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnShow;

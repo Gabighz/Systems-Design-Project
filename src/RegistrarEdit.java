@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UniversityDBMS;
+
 
 /**
  *
@@ -17,9 +17,12 @@ public class RegistrarEdit extends javax.swing.JFrame {
     public RegistrarEdit() {
         initComponents();
         this.setLocationRelativeTo(null);
-
     }
 
+    Registrar registrar = new Registrar();
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,20 +34,18 @@ public class RegistrarEdit extends javax.swing.JFrame {
 
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
-        lblRegNo = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
         lblForename = new javax.swing.JLabel();
         lblSurname = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
         lblTutor = new javax.swing.JLabel();
-        txtRegNo = new javax.swing.JTextField();
-        txtTitle = new javax.swing.JTextField();
         txtForename = new javax.swing.JTextField();
         txtSurname = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
+        txtDegreeCode = new javax.swing.JTextField();
         txtTutor = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        cmbTitle = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         lblRegNoRemove = new javax.swing.JLabel();
         txtRegNoRemove = new javax.swing.JTextField();
@@ -54,9 +55,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
         txtRegNoModule = new javax.swing.JTextField();
         btnAddModule = new javax.swing.JButton();
         lblModuleCode = new javax.swing.JLabel();
-        lblDepartment = new javax.swing.JLabel();
         txtModuleCode = new javax.swing.JTextField();
-        txtDepartmentModule = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -73,15 +72,13 @@ public class RegistrarEdit extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(204, 204, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add Student", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lucida Grande", 1, 13))); // NOI18N
 
-        lblRegNo.setText("Reg Number:");
-
         lblTitle.setText("Title:");
 
         lblForename.setText("Forename:");
 
         lblSurname.setText("Surname:");
 
-        lblEmail.setText("Email:");
+        lblEmail.setText("Degree code:");
 
         lblTutor.setText("Tutor:");
 
@@ -99,6 +96,8 @@ public class RegistrarEdit extends javax.swing.JFrame {
             }
         });
 
+        cmbTitle.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mr", "Ms", "Mrs", "Dr" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -108,7 +107,6 @@ public class RegistrarEdit extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblRegNo)
                             .addComponent(lblTitle)
                             .addComponent(lblForename)
                             .addComponent(lblSurname)
@@ -116,12 +114,11 @@ public class RegistrarEdit extends javax.swing.JFrame {
                             .addComponent(lblTutor))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtTutor, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                            .addComponent(txtRegNo)
-                            .addComponent(txtTitle)
+                            .addComponent(txtTutor)
                             .addComponent(txtForename)
                             .addComponent(txtSurname)
-                            .addComponent(txtEmail)))
+                            .addComponent(txtDegreeCode)
+                            .addComponent(cmbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(btnAdd)
@@ -132,14 +129,10 @@ public class RegistrarEdit extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRegNo)
-                    .addComponent(txtRegNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap(11, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitle)
-                    .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblForename)
@@ -151,7 +144,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEmail)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDegreeCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTutor)
@@ -159,8 +152,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAdd)
-                    .addComponent(btnClear))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnClear)))
         );
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 255));
@@ -169,6 +161,11 @@ public class RegistrarEdit extends javax.swing.JFrame {
         lblRegNoRemove.setText("Reg Number:");
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -212,8 +209,6 @@ public class RegistrarEdit extends javax.swing.JFrame {
 
         lblModuleCode.setText("Module Code:");
 
-        lblDepartment.setText("Department:");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -224,15 +219,11 @@ public class RegistrarEdit extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblRegNoAdd)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtRegNoModule))
+                        .addComponent(txtRegNoModule, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblModuleCode)
-                            .addComponent(lblDepartment))
+                        .addComponent(lblModuleCode)
                         .addGap(1, 1, 1)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDepartmentModule)
-                            .addComponent(txtModuleCode)))
+                        .addComponent(txtModuleCode))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnAddModule)))
@@ -241,7 +232,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRegNoAdd)
                     .addComponent(txtRegNoModule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -250,11 +241,8 @@ public class RegistrarEdit extends javax.swing.JFrame {
                     .addComponent(lblModuleCode)
                     .addComponent(txtModuleCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDepartmentModule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDepartment))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAddModule))
+                .addComponent(btnAddModule)
+                .addGap(22, 22, 22))
         );
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 255));
@@ -358,13 +346,13 @@ public class RegistrarEdit extends javax.swing.JFrame {
                 .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jLayeredPane1Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(12, 12, 12)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBack)
                     .addComponent(btnLogout))
@@ -407,13 +395,16 @@ public class RegistrarEdit extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        String regNo = txtRegNo.getText();
-        String title = txtTitle.getText();
+        String title = cmbTitle.getSelectedItem().toString();
         String forename = txtForename.getText();
         String surname = txtSurname.getText();
-        String email = txtEmail.getText();
+        String degreeCode = txtDegreeCode.getText();
         String tutor = txtTutor.getText();
         //add function to add to table
+        registrar.addStudent(title,forename,surname,degreeCode,tutor);
+        
+        
+        
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -423,26 +414,33 @@ public class RegistrarEdit extends javax.swing.JFrame {
 
     private void btnAddModuleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddModuleActionPerformed
         // TODO add your handling code here:
-        String regNoModule = txtRegNoModule.getText();
+        int regNoModule = Integer.parseInt(txtRegNoModule.getText());
         String moduleCode = txtModuleCode.getText();
-        String department = txtDepartmentModule.getText();
         //add code to insert module into table for given registration number
+        registrar.addStudentModule(regNoModule, moduleCode);
+        
     }//GEN-LAST:event_btnAddModuleActionPerformed
 
     private void btnDeleteModuleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteModuleActionPerformed
         // TODO add your handling code here:
-        String regNoRemove= txtRegNoRemoveModule.getText();
+        int regNoRemove= Integer.parseInt(txtRegNoRemoveModule.getText());
         String moduleCodeRemove = txtModuleCodeRemove.getText();
         //Add code to delete
+        registrar.removeStudentModule(regNoRemove, moduleCodeRemove);
+        
     }//GEN-LAST:event_btnDeleteModuleActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int regNo = Integer.parseInt(txtRegNoRemove.getText());
+        registrar.removeStudent(regNo);
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
     private void ClearFields(){
-        txtRegNo.setText(null);
-        txtTitle.setText(null);
         txtForename.setText(null);
         txtSurname.setText(null);
         txtTutor.setText(null);
-        txtEmail.setText(null);
+        txtDegreeCode.setText(null);
     }
     /**
      * @param args the command line arguments
@@ -487,6 +485,7 @@ public class RegistrarEdit extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDeleteModule;
     private javax.swing.JButton btnLogout;
+    private javax.swing.JComboBox<String> cmbTitle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLayeredPane jLayeredPane1;
@@ -494,27 +493,22 @@ public class RegistrarEdit extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JLabel lblDepartment;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblForename;
     private javax.swing.JLabel lblModuleCode;
-    private javax.swing.JLabel lblRegNo;
     private javax.swing.JLabel lblRegNoAdd;
     private javax.swing.JLabel lblRegNoRemove;
     private javax.swing.JLabel lblSurname;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblTutor;
-    private javax.swing.JTextField txtDepartmentModule;
-    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtDegreeCode;
     private javax.swing.JTextField txtForename;
     private javax.swing.JTextField txtModuleCode;
     private javax.swing.JTextField txtModuleCodeRemove;
-    private javax.swing.JTextField txtRegNo;
     private javax.swing.JTextField txtRegNoModule;
     private javax.swing.JTextField txtRegNoRemove;
     private javax.swing.JTextField txtRegNoRemoveModule;
     private javax.swing.JTextField txtSurname;
-    private javax.swing.JTextField txtTitle;
     private javax.swing.JTextField txtTutor;
     // End of variables declaration//GEN-END:variables
 }

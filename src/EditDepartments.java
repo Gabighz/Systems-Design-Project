@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UniversityDBMS;
+
 import javax.swing.JOptionPane;
 
 
@@ -21,6 +21,8 @@ public class EditDepartments extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
     }
+    
+    Administrator admin = new Administrator();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,10 +38,12 @@ public class EditDepartments extends javax.swing.JFrame {
         lblDepartmentName = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
         txtDepartmentName = new javax.swing.JTextField();
+        lblDepartmentCode = new javax.swing.JLabel();
+        txtDepartmentCode = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
-        lblRemoveDepartmentName = new javax.swing.JLabel();
+        lblRemoveDepartmentCode = new javax.swing.JLabel();
         btnDelete = new javax.swing.JButton();
-        txtRemoveDepartmentName = new javax.swing.JTextField();
+        txtRemoveDepartmentCode = new javax.swing.JTextField();
         btnLogout = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
@@ -50,7 +54,7 @@ public class EditDepartments extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(204, 204, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Add Department", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lucida Grande", 1, 14))); // NOI18N
 
-        lblDepartmentName.setText("Department name:");
+        lblDepartmentName.setText("Department Name:");
 
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -59,18 +63,25 @@ public class EditDepartments extends javax.swing.JFrame {
             }
         });
 
+        lblDepartmentCode.setText("Department Code:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(49, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lblDepartmentName)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtDepartmentName, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnAdd))
+                        .addComponent(lblDepartmentCode)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtDepartmentCode))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(lblDepartmentName)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(txtDepartmentName, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnAdd)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -80,15 +91,19 @@ public class EditDepartments extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDepartmentName)
                     .addComponent(txtDepartmentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDepartmentCode)
+                    .addComponent(txtDepartmentCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(btnAdd)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel3.setBackground(new java.awt.Color(204, 204, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Remove Department", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Lucida Grande", 1, 14))); // NOI18N
 
-        lblRemoveDepartmentName.setText("Department name: ");
+        lblRemoveDepartmentCode.setText("Department Code: ");
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -105,9 +120,9 @@ public class EditDepartments extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(lblRemoveDepartmentName)
+                        .addComponent(lblRemoveDepartmentCode)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtRemoveDepartmentName, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtRemoveDepartmentCode, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 2, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -117,10 +132,10 @@ public class EditDepartments extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRemoveDepartmentName)
-                    .addComponent(txtRemoveDepartmentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRemoveDepartmentCode)
+                    .addComponent(txtRemoveDepartmentCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnDelete))
         );
@@ -150,29 +165,28 @@ public class EditDepartments extends javax.swing.JFrame {
             editDepartmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editDepartmentsPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(editDepartmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(editDepartmentsPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnBack)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLogout))
-                    .addGroup(editDepartmentsPanelLayout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
         editDepartmentsPanelLayout.setVerticalGroup(
             editDepartmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(editDepartmentsPanelLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(editDepartmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(editDepartmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBack)
-                    .addComponent(btnLogout))
+                .addGroup(editDepartmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(editDepartmentsPanelLayout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(editDepartmentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBack)
+                            .addComponent(btnLogout)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -198,23 +212,35 @@ public class EditDepartments extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
         String department = txtDepartmentName.getText();
+        String departmentCode = txtDepartmentCode.getText();
         //Add Department Function
-        JOptionPane.showMessageDialog(null, "Department added");
-        txtDepartmentName.setText(null);
-
+        if (txtDepartmentName.getText() == "" || txtDepartmentCode.getText() == ""){
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+        }else{
+            admin.addDepartment(department, departmentCode);
+            JOptionPane.showMessageDialog(null, "Department added");
+            txtDepartmentName.setText(null);
+            txtDepartmentCode.setText(null);
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        String deleteDepartment = txtRemoveDepartmentName.getText();
+        String code = txtRemoveDepartmentCode.getText();
         //Add delete Department Function
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this module?","Delete",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (dialogResult == JOptionPane.YES_OPTION){
-            //Delete Function
-            txtRemoveDepartmentName.setText(null);
-        }
-        else {
-           txtRemoveDepartmentName.setText(null);     
+        if (code == ""){
+            JOptionPane.showMessageDialog(null, "Please ensure all fields are filled in");
+        }else{
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this department?","Delete",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (dialogResult == JOptionPane.YES_OPTION){
+                //Delete Function
+                admin.removeDepartment(code);
+                JOptionPane.showMessageDialog(null, "Department deleted");
+                txtRemoveDepartmentCode.setText(null);
+            }
+            else {
+                txtRemoveDepartmentCode.setText(null);     
+            }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -275,9 +301,11 @@ public class EditDepartments extends javax.swing.JFrame {
     private javax.swing.JLayeredPane editDepartmentsPanel;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblDepartmentCode;
     private javax.swing.JLabel lblDepartmentName;
-    private javax.swing.JLabel lblRemoveDepartmentName;
+    private javax.swing.JLabel lblRemoveDepartmentCode;
+    private javax.swing.JTextField txtDepartmentCode;
     private javax.swing.JTextField txtDepartmentName;
-    private javax.swing.JTextField txtRemoveDepartmentName;
+    private javax.swing.JTextField txtRemoveDepartmentCode;
     // End of variables declaration//GEN-END:variables
 }

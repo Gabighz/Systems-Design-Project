@@ -41,7 +41,6 @@ public class Database {
                     "RegNo INT NOT NULL, " +
                     "Email VARCHAR(255) NOT NULL, " +
                     "Tutor VARCHAR(255), " +
-                    "OverallGrade REAL, " +
                     "PRIMARY KEY(RegNo), " +
                     "FOREIGN KEY(Email) REFERENCES Accounts(Email) " +
                     ");");
@@ -56,7 +55,6 @@ public class Database {
             statement.execute("CREATE TABLE IF NOT EXISTS Degrees" +
                     "(" +
                     "Name  VARCHAR(255) NOT NULL, " +
-                    "DegreeType  VARCHAR(10) NOT NULL, " +
                     "DegreeCode  VARCHAR(7) NOT NULL, " +
                     "DepartmentCode VARCHAR(4) NOT NULL, " +
                     "PRIMARY KEY(DegreeCode), " +
@@ -77,16 +75,19 @@ public class Database {
                     "Name  VARCHAR(255) NOT NULL, " +
                     "ModuleCode  VARCHAR(8) NOT NULL, " +
                     "CalendarType VARCHAR(13), " +
-                    "Credits INT(3), " +
+                    "DegreeCode  VARCHAR(7) NOT NULL, " +
+                    "Core BIT NOT NULL" +
+                    "Credits INT(3)" +
                     "PRIMARY KEY(ModuleCode)" +
+                    "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
                     ");");
 
             statement.execute("CREATE TABLE IF NOT EXISTS Approval" +
                     "(" +
                     "ModuleCode  VARCHAR(8) NOT NULL, " +
                     "DegreeCode  VARCHAR(7) NOT NULL, " +
-                    "Level CHAR(1), " +
-                    "Core BIT, " +
+                    "Level  CHAR(1), " +
+                    "Core  BOOLEAN, " +
                     "PRIMARY KEY(ModuleCode, DegreeCode, Level), " +
                     "FOREIGN KEY(ModuleCode) REFERENCES Modules(ModuleCode), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode)" +
@@ -111,7 +112,6 @@ public class Database {
                     "Level  CHAR(1), " +
                     "DegreeCode  VARCHAR(7) NOT NULL, " +
                     "RegNo INT NOT NULL, " +
-                    "MeanGrade REAL, " +
                     "PRIMARY KEY(Label,RegNo), " +
                     "FOREIGN KEY(DegreeCode) REFERENCES Degrees(DegreeCode), " +
                     "FOREIGN KEY(RegNo) REFERENCES Students(RegNo)" +
@@ -123,6 +123,20 @@ public class Database {
                     "LevelCode  CHAR(1) NOT NULL, " +
                     "PRIMARY KEY(LevelCode) " +
                     ");");
+
+            /*statement.executeUpdate("CREATE ROLE administrator;");
+            statement.execute("GRANT INSERT, DROP, DELETE, CREATE TABLE ON * . * TO administrator WITH GRANT OPTION;");
+
+            statement.execute("CREATE OR REPLACE ROLE registrar;");
+            statement.execute("GRANT ALL ON Students TO registrar;");
+
+            statement.execute("CREATE OR REPLACE ROLE teacher;");
+            statement.execute("GRANT UPDATE, SELECT ON Students TO teacher;");
+
+            statement.execute("CREATE OR REPLACE ROLE student;");
+            statement.execute("GRANT SELECT ON Students TO student;");*/
+
+
 
             statement.close();
             System.out.println("Statement closed.");
